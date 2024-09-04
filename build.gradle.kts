@@ -34,12 +34,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.3.3")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.3.3")
     runtimeOnly("org.postgresql:postgresql")
-    //implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-
-
-
-
 }
 
 tasks.withType<Test> {

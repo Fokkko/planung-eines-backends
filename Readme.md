@@ -1,18 +1,16 @@
 # Starter für das LF08 Projekt
 
-Erstellen Sie einen Fork dieses Projektes auf Github. Wählen Sie einen Namen und passen Sie diesen auch in der pom.xml in Zeile 12, 14 und 15 an.
-
 ## Requirements
 * Docker https://docs.docker.com/get-docker/
 * Docker compose (bei Windows und Mac schon in Docker enthalten) https://docs.docker.com/compose/install/
 
 ## Endpunkt
 ```
-http://localhost:8089
+http://localhost:8080
 ```
 ## Swagger
 ```
-http://localhost:8089/swagger
+http://localhost:8080/swagger
 ```
 
 
