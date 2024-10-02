@@ -1,33 +1,28 @@
 package de.szut.lf8_starter.project.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-import java.time.LocalDate;
+
+import java.util.Date;
 
 @AllArgsConstructor
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class ProjectGetDTO {
 
-    private Integer employeeId;
-
-    private Integer setCustomerId; // TODO
+    private long id;
 
     private String name;
 
-    private String clientContactPerson;
+    private long responsibleEmployee;
+    private long customer;
 
-    private String comment;
+    private String customerName;
 
-    private LocalDate startDate;
+    private String description;
 
-    private LocalDate plannedEndDate;
-
-    private LocalDate actualEndDate;
+    private Date startDate;
+    private Date plannedDate;
+    private Date endDate;
 
 }
-
