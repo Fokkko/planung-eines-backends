@@ -35,9 +35,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.3.3")
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-
-    implementation("org.mapstruct:mapstruct:1.5.2.Final")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.2.Final")
 }
 
 tasks.withType<Test> {
