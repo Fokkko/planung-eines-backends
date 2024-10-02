@@ -28,9 +28,9 @@ public class ProjectController {
         this.helloMapper = mappingService;
     }
 
-    @Operation(summary = "creates a new project")
+    @Operation(summary = "create a new project")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "created hello",
+            @ApiResponse(responseCode = "201", description = "created project",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ProjectGetDTO.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
@@ -42,9 +42,9 @@ public class ProjectController {
         return new ResponseEntity<>(this.service.create(projectCreateDto), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "delivers a list of project")
+    @Operation(summary = "delivers a list of projects")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "list of project",
+            @ApiResponse(responseCode = "200", description = "list of projects",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ProjectGetDTO.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
