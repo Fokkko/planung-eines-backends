@@ -3,7 +3,7 @@ package de.szut.lf8_starter.project;
 
 
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
-import de.szut.lf8_starter.project.dto.ProjectGetDto;
+import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,13 +34,13 @@ public class ProjectController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "created project",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProjectGetDto.class))}),
+                            schema = @Schema(implementation = ProjectGetDTO.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content)})
     @PostMapping
-    public ResponseEntity<ProjectGetDto> create(@RequestBody @Valid ProjectPostDTO projectCreateDto) {
+    public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto) {
         return new ResponseEntity<>(this.service.create(projectCreateDto), HttpStatus.CREATED);
     }
 
@@ -48,11 +48,11 @@ public class ProjectController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "list of projects",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProjectGetDto.class))}),
+                            schema = @Schema(implementation = ProjectGetDTO.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content)})
     @GetMapping
-    public ResponseEntity<List<ProjectGetDto>> findAll() {
+    public ResponseEntity<List<ProjectGetDTO>> findAll() {
         return new ResponseEntity<>(this.service.readAll(), HttpStatus.OK);
     }
 
