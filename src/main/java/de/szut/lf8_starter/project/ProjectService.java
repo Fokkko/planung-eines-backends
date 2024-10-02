@@ -1,8 +1,8 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
+import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
-import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +17,13 @@ public class ProjectService {
         this.repository = repository;
     }
 
-    public ProjectGetDTO create(ProjectPostDTO dto) {
+    public ProjectGetDto create(ProjectPostDTO dto) {
         ProjectEntity getProjectDto = ProjectMapper.INSTANCE.projectDTOToEntity(dto);
         this.repository.save(getProjectDto);
         return ProjectMapper.INSTANCE.projectEntityToDTO(getProjectDto);
     }
 
-    public List<ProjectGetDTO> readAll() {
+    public List<ProjectGetDto> readAll() {
         List<ProjectEntity> entityList = this.repository.findAll();
         return entityList.stream().map(ProjectMapper.INSTANCE::projectEntityToDTO).collect(Collectors.toList());
     }
