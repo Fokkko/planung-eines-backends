@@ -53,15 +53,15 @@ public class EmployeeService {
         }
     }
 
-    private String getJwtToken() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) auth;
-            Jwt jwt = jwtAuthenticationToken.getToken();
-            String tokenValue = jwt.getTokenValue();
-            return "Bearer " + tokenValue;
-        }
-        return "JWT Token Not found";
-    }
+//    private String getJwtToken() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth instanceof JwtAuthenticationToken) {
+//            JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) auth;
+//            Jwt jwt = jwtAuthenticationToken.getToken();
+//            String tokenValue = jwt.getTokenValue();
+//            return "Bearer " + tokenValue;
+//        }
+//        return "JWT Token Not found";
+//    }
 }
 

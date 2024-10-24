@@ -61,7 +61,6 @@ public class ProjectController implements ProjectControllerOpenAPI{
 
     @PostMapping("/addEmployeeInProject")
     public ResponseEntity<AddEmployeeInProject> addEmployeeInProject(@RequestBody @Valid AddEmployeeInProject addEmployeeInProject, @RequestHeader(name = "Authorization") String token) {
-
         boolean isAdded = service.addEmployeeToProject(addEmployeeInProject, token);
         if (isAdded) {
             return new ResponseEntity<>(addEmployeeInProject, HttpStatus.CREATED);
