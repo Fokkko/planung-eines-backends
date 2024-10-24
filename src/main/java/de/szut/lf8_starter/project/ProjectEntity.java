@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +43,20 @@ public class ProjectEntity {
     private LocalDate plannedEndDate;
 
     private LocalDate actualEndDate;
+
+//    private List<String> qualification;
+
+    @ElementCollection
+    @CollectionTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "employee_id")
+    private List<Integer> employeeIds;
+
+    @ElementCollection
+    @CollectionTable(name = "project_qualification", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "qualification")
+    private List<String> qualificationIds;
+
+    // übe die Abschlussprüfung gesprochen, uns mit Projektdokumentation beschäftigt, Gruppenarbeit aus 6 Azubi
 
 }
 

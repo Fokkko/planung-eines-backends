@@ -5,15 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class ProjectPostDTO {
-    private long id;
 
-    private Integer employeeId;
+    private Integer responsibleEmployeeId;
 
     private Integer setCustomerId;
 
@@ -28,4 +28,6 @@ public class ProjectPostDTO {
     private LocalDate plannedEndDate;
 
     private LocalDate actualEndDate;
+    private List<String> qualificationIds;
+
 }
