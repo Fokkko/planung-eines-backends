@@ -44,8 +44,6 @@ public class ProjectEntity {
 
     private LocalDate actualEndDate;
 
-//    private List<String> qualification;
-
     @ElementCollection
     @CollectionTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "employee_id")
@@ -54,7 +52,7 @@ public class ProjectEntity {
     @ElementCollection
     @CollectionTable(name = "project_qualification", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "qualification")
-    private List<String> qualificationIds;
+    private List<String> qualifications;
 
     // übe die Abschlussprüfung gesprochen, uns mit Projektdokumentation beschäftigt, Gruppenarbeit aus 6 Azubi
 

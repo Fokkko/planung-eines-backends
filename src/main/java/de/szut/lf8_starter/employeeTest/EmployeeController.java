@@ -22,10 +22,6 @@ public class EmployeeController {
             return ResponseEntity.notFound().build();
         }
 
-        if (employee){
-            var employeeQualification = employeeService.employeeForQualification(id, token);
-        }
-
         return ResponseEntity.ok(employee);
     }
 // welche Ressourcen braucht das projekt backend 4 Java, 2 C# usw.

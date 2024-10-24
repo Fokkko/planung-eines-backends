@@ -120,17 +120,15 @@ public class ProjectService {
 
     private boolean isQualifiedForProject(SkillDTO skillDTO, ProjectEntity project) {
         List<String> requiredQualifications = project.getQualificationIds();
-
         List<String> employeeQualifications = skillDTO.getSkillSet();
 
         if (requiredQualifications != null && employeeQualifications != null) {
-            for (int i = 0; i < requiredQualifications.size(); i++) {
-                if (!employeeQualifications.contains(employeeQualifications.get(i))) {
+            for (String requiredQualification : requiredQualifications) {
+                if (!employeeQualifications.contains(requiredQualification)) {
                     return false;
                 }
             }
         }
-
         return true;
     }
 

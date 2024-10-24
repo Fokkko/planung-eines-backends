@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +39,7 @@ public class EmployeeService {
         }
     }
 
-    public SkillDTO employeeForQualification(Integer employeeId, String token){
+    public SkillDTO employeeForQualification(Integer employeeId, String token) {
         String url = "https://employee.szut.dev/employees/" + employeeId;
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,6 +53,7 @@ public class EmployeeService {
             throw new RuntimeException("Qualifikation kann nicht abgerufen werden: " + e.getMessage(), e);
         }
     }
+
 
 //    private String getJwtToken() {
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();

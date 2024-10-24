@@ -28,6 +28,6 @@ public class ProjectPostDTO {
     private LocalDate plannedEndDate;
 
     private LocalDate actualEndDate;
-    private List<String> qualificationIds;
+    private List<String> qualifications;
 
 }

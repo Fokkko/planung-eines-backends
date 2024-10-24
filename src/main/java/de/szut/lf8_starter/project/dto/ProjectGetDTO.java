@@ -29,5 +29,5 @@ public class ProjectGetDTO {
 //    private LocalDate plannedDate;
 //    private LocalDate endDate;
     private List<Integer> employeeIds;
-    private List<String> qualificationIds;
+    private List<String> qualifications;
 }
