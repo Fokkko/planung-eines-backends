@@ -1,6 +1,5 @@
 package de.szut.lf8_starter.project;
 
-import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.testcontainers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -8,7 +7,7 @@ import org.springframework.http.MediaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Arrays;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -23,12 +22,24 @@ public class ProjectPutIT extends AbstractIntegrationTest {
     @Test
     void authorization() throws Exception {
         // Attempt to update a project without authentication
-        var updatedProject = new ProjectGetDTO(1L, "Updated Project A", 101L, 201L, "Updated Customer X",
-                "Updated description", new Date(), new Date(), new Date());
+        // Creating two ProjectEntity objects
+        ProjectEntity project1 = new ProjectEntity(
+                1,
+                "Project Alpha",
+                101,
+                5001,
+                "John Doe",
+                "This is a priority project",
+                LocalDate.of(2024, 10, 1),
+                LocalDate.of(2025, 3, 30),
+                null,
+                Arrays.asList(101, 102, 103),
+                Arrays.asList("Java", "ABAP", "SAPUI5")
+        );
 
         this.mockMvc.perform(put("/projects/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedProject))
+                        .content(objectMapper.writeValueAsString(project1))
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
     }
@@ -36,11 +47,39 @@ public class ProjectPutIT extends AbstractIntegrationTest {
     @Test
     @WithMockUser(roles = "admin")
     void updateProject() throws Exception {
-        var existingProject = projectRepository.save(new ProjectEntity(1L, "Project A", 101, 201, "Customer X",
-                "Description for Project A", LocalDate.of(10,10,10), LocalDate.of(10,10,10), LocalDate.of(10,10,10)));
 
-        var updatedProject = new ProjectGetDTO(existingProject.getId(), "Updated Project A", 102L, 202L, "Updated Customer X",
-                "Updated description", new Date(), new Date(), new Date());
+        // Creating two ProjectEntity objects
+        ProjectEntity project1 = new ProjectEntity(
+                2,
+                "HPG: SAP Einführung Warenwirtschaft",
+                101,
+                5001,
+                "Happy People GmbH",
+                "This is a priority project",
+                LocalDate.of(2024, 10, 1),
+                LocalDate.of(2025, 3, 30),
+                null,
+                Arrays.asList(101, 102, 103),
+                Arrays.asList("Javascript", "ABAP", "SAPUI5")
+        );
+
+        ProjectEntity project2 = new ProjectEntity(
+                3,
+                "Project Beta",
+                102,
+                5002,
+                "Jane Smith",
+                "Follow-up project",
+                LocalDate.of(2024, 11, 1),
+                LocalDate.of(2025, 4, 30),
+                null,
+                Arrays.asList(104, 105),
+                Arrays.asList("Python", "JavaScript")
+        );
+
+        var existingProject = projectRepository.save(project1);
+
+        var updatedProject = projectRepository.save(project2);
 
         this.mockMvc.perform(put("/projects/{id}", existingProject.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +93,7 @@ public class ProjectPutIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.description", is("Updated description")));
 
         // Verify that the project is updated in the repository
-        var projectFromDb = projectRepository.findById(existingProject.getId()).orElseThrow();
+        var projectFromDb = projectRepository.findById((int) existingProject.getId()).orElseThrow();
         assert(projectFromDb.getName().equals("Updated Project A"));
         assert(projectFromDb.getCustomerContactName().equals("Updated Customer X"));
     }

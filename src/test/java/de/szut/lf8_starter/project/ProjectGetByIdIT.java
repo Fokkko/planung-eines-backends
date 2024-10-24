@@ -1,35 +1,32 @@
-
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.testcontainers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
-
 import java.time.LocalDate;
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.is;
 
-
-public class ProjectGetAllIT extends AbstractIntegrationTest {
-
+public class ProjectGetByIdIT extends AbstractIntegrationTest {
 
     @Test
     void authorization() throws Exception {
-        this.mockMvc.perform(get("/project/")
+        // Attempt to get a project by ID without authentication
+        this.mockMvc.perform(get("/projects/1")
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "user")
-    void findAll() throws Exception {
+    void getProjectById() throws Exception {
+
 
         // Creating two ProjectEntity objects
         ProjectEntity project1 = new ProjectEntity(
@@ -46,31 +43,26 @@ public class ProjectGetAllIT extends AbstractIntegrationTest {
                 Arrays.asList("Javascript", "ABAP", "SAPUI5")
         );
 
-        ProjectEntity project2 = new ProjectEntity(
-                3,
-                "Project Beta",
-                102,
-                5002,
-                "Jane Smith",
-                "Follow-up project",
-                LocalDate.of(2024, 11, 1),
-                LocalDate.of(2025, 4, 30),
-                null,
-                Arrays.asList(104, 105),
-                Arrays.asList("Python", "JavaScript")
-        );
+        var existingProject = projectRepository.save(project1);
 
-        projectRepository.save(project1);
-        projectRepository.save(project2);
-        this.mockMvc.perform(get("/projects/")
+        // Perform GET request to retrieve the project by ID
+        this.mockMvc.perform(get("/projects/{id}", existingProject.getId())
                         .with(csrf()))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is("HPG: SAP Einführung Warenwirtschaft")))
-                .andExpect(jsonPath("$[0].customerName", is("Happy People GmbH")))
-                .andExpect(jsonPath("$[1].name", is("Project B")))
-                .andExpect(jsonPath("$[1].customerName", is("Customer Y")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Project A")))
+                .andExpect(jsonPath("$.customerName", is("Customer X")))
+                .andExpect(jsonPath("$.responsibleEmployee", is(101)))
+                .andExpect(jsonPath("$.customer", is(201)))
+                .andExpect(jsonPath("$.description", is("Description for Project A")));
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void getNonExistingProject() throws Exception {
+        // Attempt to get a non-existing project
+        this.mockMvc.perform(get("/projects/{id}", 999)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
     }
 
 }
-
