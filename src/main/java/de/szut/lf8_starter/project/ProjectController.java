@@ -2,14 +2,14 @@ package de.szut.lf8_starter.project;
 
 
 
+import de.szut.lf8_starter.employeeTest.dto.SkillDTO;
+import de.szut.lf8_starter.project.dto.AddEmployeeInProject;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -19,76 +19,66 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "hello")
+@RequestMapping(value = "projects")
 @PreAuthorize("hasAnyAuthority('user')")
-public class ProjectController {
+@RequiredArgsConstructor
+@Getter
+@Setter
+public class ProjectController implements ProjectControllerOpenAPI{
     private final ProjectService service;
-    private final ProjectMapper projectMapper;
+    private ProjectMapper projectMapper;
 
-    public ProjectController(ProjectService service, ProjectMapper mappingService) {
-        this.service = service;
-        this.projectMapper = mappingService;
+    @Override
+    @PostMapping("/create")
+    public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto, @RequestHeader (name="Authorization") String token) {
+        return new ResponseEntity<>(this.service.create(projectCreateDto, token), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "creates a new project")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "created project",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProjectGetDTO.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content)})
-    @PostMapping
-    public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto) {
-        return new ResponseEntity<>(this.service.create(projectCreateDto), HttpStatus.CREATED);
+    @Override
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ProjectGetDTO> update(@PathVariable Integer id, @RequestBody @Valid ProjectPostDTO projectUpdateDto, @RequestHeader (name="Authorization") String token){
+        return new ResponseEntity<>(this.service.update(id, projectUpdateDto, token), HttpStatus.OK);
     }
 
-    @Operation(summary = "delivers a list of projects")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "list of projects",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProjectGetDTO.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content)})
+    @Override
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProjectById(@PathVariable Integer id){
+        this.service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
     @GetMapping
-    public ResponseEntity<List<ProjectGetDTO>> findAll() {
-        return new ResponseEntity<>(this.service.readAll(), HttpStatus.OK);
+    public ResponseEntity<List<ProjectGetDTO>> findAllProjects() {
+        return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
     }
 
-//    @Operation(summary = "deletes project id")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "204", description = "delete successful"),
-//            @ApiResponse(responseCode = "401", description = "not authorized",
-//                    content = @Content),
-//            @ApiResponse(responseCode = "404", description = "resource not found",
-//                    content = @Content)})
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-//    public void deleteById(@PathVariable long id) {
-//        var entity = this.service.readById(id);
-//        if (entity == null) {
-//            throw new ResourceNotFoundException("ProjectEntity not found on id = " + id);
-//        } else {
-//            this.service.delete(entity);
-//        }
-//    }
-//
-//    @Operation(summary = "find hellos by message")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "List of hellos who have the given message",
-//                    content = {@Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = ProjectDto.class))}),
-//            @ApiResponse(responseCode = "404", description = "qualification description does not exist",
-//                    content = @Content),
-//            @ApiResponse(responseCode = "401", description = "not authorized",
-//                    content = @Content)})
-//    @GetMapping("/findByMessage")
-//    public List<ProjectDto> findAllEmployeesByQualification(@RequestParam String message) {
-//        return this.service
-//                .findByMessage(message)
-//                .stream()
-//                .map(e -> this.helloMapper.mapToGetDto(e))
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<ProjectGetDTO> getProjectById(@PathVariable Integer id){
+        return new ResponseEntity<>(this.service.findById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/addEmployeeInProject")
+    public ResponseEntity<AddEmployeeInProject> addEmployeeInProject(@RequestBody @Valid AddEmployeeInProject addEmployeeInProject, @RequestHeader(name = "Authorization") String token) {
+
+        boolean isAdded = service.addEmployeeToProject(addEmployeeInProject, token);
+        if (isAdded) {
+            return new ResponseEntity<>(addEmployeeInProject, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    @DeleteMapping("/deleteEmployee/{pid}/{eid}")
+    public ResponseEntity<Void> deleteEmployeeFromProject(@PathVariable Integer pid, @PathVariable Integer eid){
+        this.service.deleteEmployeeFromProject(pid, eid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ProjectGetDTO>> findAllEmployeesByQualification(String qualificationMessage) {
+        return null;
+    }
 }
