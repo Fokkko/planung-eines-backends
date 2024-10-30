@@ -38,7 +38,6 @@ public class ProjectService {
         }
     }
 
-    // TODO: 405 Not Allowed Method
     public ProjectGetDTO update(Integer id, ProjectPostDTO dtoToUpdate, String token) {
         Optional<ProjectEntity> entityOptional = repository.findById(id);
 
@@ -107,7 +106,6 @@ public class ProjectService {
         return false;
     }
 
-
     public void deleteEmployeeFromProject(Integer pid, Integer eid) {
         Optional<ProjectEntity> entityOptional = this.repository.findById(pid);
 
@@ -122,7 +120,6 @@ public class ProjectService {
             throw new EntityNotFoundException("Projekt mit der ID " + pid + " nicht gefunden.");
         }
     }
-
 
     public List<ProjectGetDTO> findAllEmployeesByQualification(String message) {
 //        // Assuming you have a method in the repository to find projects by qualification
