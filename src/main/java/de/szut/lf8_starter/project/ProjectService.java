@@ -1,19 +1,18 @@
 package de.szut.lf8_starter.project;
 
-import de.szut.lf8_starter.employeeTest.EmployeeService;
-import de.szut.lf8_starter.employeeTest.dto.SkillDTO;
-import de.szut.lf8_starter.project.dto.AddEmployeeInProject;
+import de.szut.lf8_starter.employee.EmployeeService;
+import de.szut.lf8_starter.employee.Skill;
+import de.szut.lf8_starter.employee.dto.SkillDTO;
+import de.szut.lf8_starter.project.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +23,8 @@ public class ProjectService {
 
 
     public ProjectGetDTO create(ProjectPostDTO dto, String token) {
-        if (employeeService.getEmployeeById(dto.getResponsibleEmployeeId(), token)) {
+
+        if (employeeService.checkEmployeeExists(dto.getResponsibleEmployeeId(), token)) {
 
             ProjectEntity projectEntity = projectMapper.projectDTOToEntity(dto);
 
@@ -38,35 +38,21 @@ public class ProjectService {
         }
     }
 
+    // TODO: 405 Not Allowed Method
     public ProjectGetDTO update(Integer id, ProjectPostDTO dtoToUpdate, String token) {
         Optional<ProjectEntity> entityOptional = repository.findById(id);
 
-        if (entityOptional.isPresent()) {
-            ProjectEntity existingEntity = entityOptional.get();
-
-            if (employeeService.getEmployeeById(dtoToUpdate.getResponsibleEmployeeId(), token)) {
-                existingEntity.setName(dtoToUpdate.getName());
-                existingEntity.setResponsibleEmployeeId(dtoToUpdate.getResponsibleEmployeeId());
-                existingEntity.setCustomerId(dtoToUpdate.getSetCustomerId());
-                existingEntity.setCustomerContactName(dtoToUpdate.getClientContactPerson());
-                existingEntity.setComment(dtoToUpdate.getComment());
-                existingEntity.setStartDate(dtoToUpdate.getStartDate());
-                existingEntity.setPlannedEndDate(dtoToUpdate.getPlannedEndDate());
-                existingEntity.setActualEndDate(dtoToUpdate.getActualEndDate());
-                existingEntity.setQualificationIds(dtoToUpdate.getQualificationIds());
-
-                repository.save(existingEntity);
-
-                return projectMapper.projectEntityToDTO(existingEntity);
-            } else {
-                throw new IllegalArgumentException("Verantwortlicher Mitarbeiter existiert nicht.");
-            }
-        } else {
+        if (entityOptional.isEmpty())
             throw new EntityNotFoundException("Projekt mit der ID " + id + " nicht gefunden.");
-        }
+        ProjectEntity existingEntity = entityOptional.get();
+        if (!employeeService.checkEmployeeExists(dtoToUpdate.getResponsibleEmployeeId(), token))
+            throw new IllegalArgumentException("Verantwortlicher Mitarbeiter existiert nicht.");
+
+        ProjectEntity updateDtoToEntity = this.projectMapper.projectDTOToEntity(dtoToUpdate);
+        repository.save(updateDtoToEntity);
+
+        return this.projectMapper.projectEntityToDTO(updateDtoToEntity);
     }
-
-
 
     public void deleteById(Integer id){
         var entity = this.repository.findById(id);
@@ -75,64 +61,55 @@ public class ProjectService {
         }
     }
 
-
     public List<ProjectGetDTO> findAll() {
         List<ProjectEntity> entityList = this.repository.findAll();
         return entityList.stream()
                 .map(projectMapper::projectEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ProjectGetDTO findById(Integer id){
         Optional<ProjectEntity> entity = this.repository.findById(id);
-        if (entity.isPresent()) {
-            var dto = this.projectMapper.projectEntityToDTO(entity.get());
-            return dto;
-        }else {
+        if (entity.isEmpty()) {
             return null;
         }
+        return this.projectMapper.projectEntityToDTO(entity.get());
     }
 
-    public boolean addEmployeeToProject(AddEmployeeInProject addEmployeeInProject, String token) {
-        Optional<ProjectEntity> projectEntityOpt = repository.findById(addEmployeeInProject.getPid());
-        if (!projectEntityOpt.isPresent()) {
-            return false;
-        }
+    public boolean addEmployeeToProject(AddEmployeeToProject addEmployeeToProject, String token) {
+        Optional<ProjectEntity> projectEntityOpt = repository.findById(addEmployeeToProject.getProjectId());
+        if (!projectEntityOpt.isPresent()) return false;
 
         ProjectEntity project = projectEntityOpt.get();
 
-        SkillDTO skillDTO = employeeService.employeeForQualification(addEmployeeInProject.getEid(), token);
-        if (skillDTO == null || !isQualifiedForProject(skillDTO, project)) {
-            return false;
-        }
-
-        if (project.getEmployeeIds() == null) {
+        if (project.getEmployeeIds() == null)
             project.setEmployeeIds(new ArrayList<>());
-        }
 
-        if (!project.getEmployeeIds().contains(addEmployeeInProject.getEid())) {
-            project.getEmployeeIds().add(addEmployeeInProject.getEid());
+        var isQualified = isQualifiedForProject(addEmployeeToProject.getSkillsId(), project);
+        var isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
+        var isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
+
+        if (isQualified && isEmployeeExists && isEmployeeExistsInProject){
+            project.getEmployeeIds().add(addEmployeeToProject.getEmployeeId());
             repository.save(project);
+            return true;
         }
-
-        return true;
+        return false;
     }
 
-    private boolean isQualifiedForProject(SkillDTO skillDTO, ProjectEntity project) {
-        List<String> requiredQualifications = project.getQualificationIds();
+    private boolean isQualifiedForProject(List<Integer> skillIds, ProjectEntity project) {
+        List<Integer> requiredQualifications = project.getProjectQualificationIds();
 
-        List<String> employeeQualifications = skillDTO.getSkillSet();
+        if (requiredQualifications == null || skillIds == null)
+            return false;
 
-        if (requiredQualifications != null && employeeQualifications != null) {
-            for (int i = 0; i < requiredQualifications.size(); i++) {
-                if (!employeeQualifications.contains(employeeQualifications.get(i))) {
-                    return false;
-                }
-            }
+        for (Integer skillId : skillIds) {
+            if (requiredQualifications.contains(skillId))
+                return true;
         }
-
-        return true;
+        return false;
     }
+
 
     public void deleteEmployeeFromProject(Integer pid, Integer eid) {
         Optional<ProjectEntity> entityOptional = this.repository.findById(pid);
