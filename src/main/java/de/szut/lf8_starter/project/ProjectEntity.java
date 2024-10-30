@@ -31,6 +31,9 @@ public class ProjectEntity {
     @NotNull(message = "Kunden-ID ist erforderlich")
     private Integer customerId;
 
+    @NotNull(message = "Kunden-Name ist erforderlich")
+    private String customerName;
+
     @NotBlank(message = "Name der Kundenkontaktperson darf nicht leer sein")
     private String customerContactName;
 
@@ -52,7 +55,7 @@ public class ProjectEntity {
     @ElementCollection
     @CollectionTable(name = "project_qualification", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "qualification")
-    private List<String> qualifications;
+    private List<Integer> projectQualificationIds;
 
     // übe die Abschlussprüfung gesprochen, uns mit Projektdokumentation beschäftigt, Gruppenarbeit aus 6 Azubi
 

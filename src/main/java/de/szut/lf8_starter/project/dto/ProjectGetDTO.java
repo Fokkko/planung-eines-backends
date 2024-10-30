@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,17 +16,18 @@ public class ProjectGetDTO {
     private long id;
 
     private String name;
-//
-//    private long responsibleEmployee;
-//    private long customer;
-//
-//    private String customerName;
-//
-//    private String description;
-//
-//    private LocalDate startDate;
-//    private LocalDate plannedDate;
-//    private LocalDate endDate;
+
+    private Integer responsibleEmployee;
+    private Integer customerId;
+
+    private String customerName;
+    private String customerContactName;
+
+    private String description;
+
+    private LocalDate startDate;
+    private LocalDate plannedDate;
+    private LocalDate endDate;
     private List<Integer> employeeIds;
-    private List<String> qualifications;
+    private List<Integer> projectQualificationIds;
 }

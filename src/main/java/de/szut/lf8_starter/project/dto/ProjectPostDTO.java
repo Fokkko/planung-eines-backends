@@ -15,11 +15,12 @@ public class ProjectPostDTO {
 
     private Integer responsibleEmployeeId;
 
-    private Integer setCustomerId;
+    private Integer customerId;
+    private String customerName;
 
     private String name;
 
-    private String clientContactPerson;
+    private String customerContactName;
 
     private String comment;
 
@@ -28,6 +29,6 @@ public class ProjectPostDTO {
     private LocalDate plannedEndDate;
 
     private LocalDate actualEndDate;
-    private List<String> qualifications;
+    private List<Integer> projectQualificationIds;
 
 }
