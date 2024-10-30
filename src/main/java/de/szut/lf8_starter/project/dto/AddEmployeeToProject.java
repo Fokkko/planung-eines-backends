@@ -8,5 +8,5 @@ import java.util.List;
 public class AddEmployeeToProject {
     private Integer employeeId;
     private Integer projectId;
-    private List<Integer> skillsId;
+    private Integer skillsId;
 }

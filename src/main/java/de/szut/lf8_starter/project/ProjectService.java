@@ -97,16 +97,13 @@ public class ProjectService {
         return false;
     }
 
-    private boolean isQualifiedForProject(List<Integer> skillIds, ProjectEntity project) {
+    private boolean isQualifiedForProject(Integer skillId, ProjectEntity project) {
         List<Integer> requiredQualifications = project.getProjectQualificationIds();
 
-        if (requiredQualifications == null || skillIds == null)
+        if (requiredQualifications == null || skillId == null)
             return false;
+            if (requiredQualifications.contains(skillId)) return true;
 
-        for (Integer skillId : skillIds) {
-            if (requiredQualifications.contains(skillId))
-                return true;
-        }
         return false;
     }
 
