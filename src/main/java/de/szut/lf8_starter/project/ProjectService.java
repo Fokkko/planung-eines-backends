@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -119,7 +120,9 @@ public class ProjectService {
     }
 
     public List<ProjectGetDTO> findAllProjectsByEmployee(Integer employeeId) {
-
-        return null;
+        List<ProjectEntity> projects = this.repository.findByEmployeeIdsContains(employeeId);
+        return projects.stream()
+                .map(project -> projectMapper.projectEntityToDTO(project))
+                .collect(Collectors.toList());
     }
 }

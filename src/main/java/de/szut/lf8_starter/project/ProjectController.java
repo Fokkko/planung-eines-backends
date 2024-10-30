@@ -79,10 +79,10 @@ public class ProjectController implements ProjectControllerOpenAPI {
     }
 
     @Override
-    @GetMapping("/findByQualification/{id}")
-    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id,  @RequestHeader(name = "Authorization") String token) {
-
-        return null;
+    @GetMapping("/findAllProjectsByEmployee/{id}")
+    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id) {
+        var getAllProjectsByEmployee = this.service.findAllProjectsByEmployee(id);
+        return new ResponseEntity<>(getAllProjectsByEmployee, HttpStatus.OK);
     }
 
 }
