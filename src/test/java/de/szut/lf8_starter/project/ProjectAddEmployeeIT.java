@@ -37,11 +37,12 @@ public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
                 5002,
                 "Jane Smith",
                 "Follow-up project",
+                "",
                 LocalDate.of(2024, 11, 1),
                 LocalDate.of(2025, 4, 30),
                 null,
                 Arrays.asList(104, 105),
-                Arrays.asList("Python", "JavaScript")
+                Arrays.asList(1, 2)
         );
 
         this.mockMvc.perform(post("/projects/")

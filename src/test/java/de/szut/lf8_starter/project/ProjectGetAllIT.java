@@ -35,29 +35,31 @@ public class ProjectGetAllIT extends AbstractIntegrationTest {
         ProjectEntity project1 = new ProjectEntity(
                 2,
                 "HPG: SAP Einführung Warenwirtschaft",
-                101,
+                297,
                 5001,
                 "Happy People GmbH",
+                "",
                 "This is a priority project",
                 LocalDate.of(2024, 10, 1),
                 LocalDate.of(2025, 3, 30),
                 null,
-                Arrays.asList(101, 102, 103),
-                Arrays.asList("Javascript", "ABAP", "SAPUI5")
+                Arrays.asList(298),
+                Arrays.asList(10,207)
         );
 
         ProjectEntity project2 = new ProjectEntity(
                 3,
                 "Project Beta",
-                102,
+                298,
                 5002,
                 "Jane Smith",
+                "",
                 "Follow-up project",
                 LocalDate.of(2024, 11, 1),
                 LocalDate.of(2025, 4, 30),
                 null,
-                Arrays.asList(104, 105),
-                Arrays.asList("Python", "JavaScript")
+                Arrays.asList(297),
+                Arrays.asList(10,207)
         );
 
         projectRepository.save(project1);
