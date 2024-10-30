@@ -6,17 +6,8 @@ import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 @Component
 public class ProjectMapper {
-
-//    private final EmployeeRepository employeeRepository;
-//
-//    public ProjectMapper(EmployeeRepository employeeRepository) {
-//        this.employeeRepository = employeeRepository;
-//    }
 
     public ProjectGetDTO projectEntityToDTO(ProjectEntity entity) {
         if (entity == null) {
@@ -26,15 +17,16 @@ public class ProjectMapper {
         ProjectGetDTO dto = new ProjectGetDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-//        dto.setResponsibleEmployee(entity.getResponsibleEmployeeId());
-//        dto.setCustomer(entity.getCustomerId());
-//        dto.setCustomerName(entity.getCustomerContactName());
-//        dto.setDescription(entity.getComment());
-//        dto.setStartDate(entity.getStartDate());
-//        dto.setPlannedDate(entity.getPlannedEndDate());
-//        dto.setEndDate(entity.getActualEndDate());
+        dto.setResponsibleEmployee(entity.getResponsibleEmployeeId());
+        dto.setCustomerId(entity.getCustomerId());
+        dto.setCustomerContactName(entity.getCustomerContactName());
+        dto.setDescription(entity.getComment());
+        dto.setStartDate(entity.getStartDate());
+        dto.setPlannedDate(entity.getPlannedEndDate());
+        dto.setCustomerName(entity.getCustomerName());
+        dto.setEndDate(entity.getActualEndDate());
         dto.setEmployeeIds(entity.getEmployeeIds());
-        dto.setQualificationIds(entity.getQualificationIds());
+        dto.setProjectQualificationIds(entity.getProjectQualificationIds());
 
         return dto;
     }
@@ -47,19 +39,16 @@ public class ProjectMapper {
         ProjectEntity entity = new ProjectEntity();
         entity.setName(dto.getName());
         entity.setResponsibleEmployeeId(dto.getResponsibleEmployeeId());
-        entity.setCustomerId(dto.getSetCustomerId());
-        entity.setCustomerContactName(dto.getClientContactPerson());
+        entity.setCustomerId(dto.getCustomerId());
+        entity.setCustomerContactName(dto.getCustomerContactName());
+        entity.setCustomerName(dto.getCustomerName());
         entity.setComment(dto.getComment());
         entity.setStartDate(dto.getStartDate());
         entity.setPlannedEndDate(dto.getPlannedEndDate());
         entity.setActualEndDate(dto.getActualEndDate());
-        if (dto.getQualificationIds() != null && !dto.getQualificationIds().isEmpty()){
-            entity.setQualificationIds(dto.getQualificationIds());
+        if (dto.getProjectQualificationIds() != null && !dto.getProjectQualificationIds().isEmpty()){
+            entity.setProjectQualificationIds(dto.getProjectQualificationIds());
         }
-
-//        if (dto.getEmployeeIds() != null) {
-//            entity.setEmployeeIds(new ArrayList<>(dto.getEmployeeIds()));
-//        }
 
         return entity;
     }
