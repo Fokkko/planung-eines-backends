@@ -1,8 +1,6 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
-import de.szut.lf8_starter.employee.Skill;
-import de.szut.lf8_starter.employee.dto.SkillDTO;
 import de.szut.lf8_starter.project.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
@@ -43,7 +41,6 @@ public class ProjectService {
 
         if (entityOptional.isEmpty())
             throw new EntityNotFoundException("Projekt mit der ID " + id + " nicht gefunden.");
-        ProjectEntity existingEntity = entityOptional.get();
         if (!employeeService.checkEmployeeExists(dtoToUpdate.getResponsibleEmployeeId(), token))
             throw new IllegalArgumentException("Verantwortlicher Mitarbeiter existiert nicht.");
 
@@ -77,7 +74,7 @@ public class ProjectService {
 
     public boolean addEmployeeToProject(AddEmployeeToProject addEmployeeToProject, String token) {
         Optional<ProjectEntity> projectEntityOpt = repository.findById(addEmployeeToProject.getProjectId());
-        if (!projectEntityOpt.isPresent()) return false;
+        if (projectEntityOpt.isEmpty()) return false;
 
         ProjectEntity project = projectEntityOpt.get();
 
