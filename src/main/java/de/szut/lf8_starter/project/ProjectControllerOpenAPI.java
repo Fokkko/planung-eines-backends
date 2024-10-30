@@ -106,5 +106,5 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id);
+    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id,  @RequestHeader(name = "Authorization") String token);
 }

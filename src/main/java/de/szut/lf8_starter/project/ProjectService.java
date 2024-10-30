@@ -118,12 +118,8 @@ public class ProjectService {
         }
     }
 
-    public List<ProjectGetDTO> findAllEmployeesByQualification(String message) {
-//        // Assuming you have a method in the repository to find projects by qualification
-//        List<ProjectEntity> projects = this.repository.findByQualification(message);
-//        return projects.stream()
-//                .map(ProjectMapper.INSTANCE::projectEntityToDTO)
-//                .collect(Collectors.toList());
+    public List<ProjectGetDTO> findAllProjectsByEmployee(Integer employeeId) {
+
         return null;
     }
 }

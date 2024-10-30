@@ -80,7 +80,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @Override
     @GetMapping("/findByQualification/{id}")
-    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id) {
+    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id,  @RequestHeader(name = "Authorization") String token) {
 
         return null;
     }
