@@ -66,7 +66,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
         if (isAdded) {
             return new ResponseEntity<>(addEmployeeToProject, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
