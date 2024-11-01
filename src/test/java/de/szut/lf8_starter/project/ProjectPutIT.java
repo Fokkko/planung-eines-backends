@@ -1,15 +1,15 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.testcontainers.AbstractIntegrationTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,30 +17,36 @@ import static org.hamcrest.Matchers.is;
 
 public class ProjectPutIT extends AbstractIntegrationTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private int testProjectId = 1;
+    private String token;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        Util.createProjectTestData(projectRepository, testProjectId);
+        this.token = Util.fetchAccessToken();
+    }
 
     @Test
     void authorization() throws Exception {
-        // Attempt to update a project without authentication
-        // Creating two ProjectEntity objects
-        ProjectEntity project1 = new ProjectEntity(
-                1,
-                "Project Alpha",
-                297,
-                5001,
-                "John Doe",
-                "",
-                "This is a priority project",
-                LocalDate.of(2024, 10, 1),
-                LocalDate.of(2025, 3, 30),
-                null,
-                Arrays.asList(298),
-                Arrays.asList(10,207)
-        );
+        String projectJson1 = """
+            {
+                "name": "Verändertes Projekt",
+                "responsibleEmployeeId": 297,
+                "customerId": 5002,
+                "customerName": "Happy People GmbH",
+                "customerContactName": "Jane Smith",
+                "comment": "High priority project",
+                "startDate": "2024-11-01",
+                "endDate": "2025-04-30",
+                "projectQualificationIds": [
+                 10
+                ]
+            }
+        """;
 
-        this.mockMvc.perform(put("/projects/1")
+        this.mockMvc.perform(put("/projects/update/" + testProjectId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(project1))
+                        .content(projectJson1)
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
     }
@@ -49,56 +55,62 @@ public class ProjectPutIT extends AbstractIntegrationTest {
     @WithMockUser(roles = "admin")
     void updateProject() throws Exception {
 
-        // Creating two ProjectEntity objects
-        ProjectEntity project1 = new ProjectEntity(
-                2,
-                "Project Alpha",
-                297,
-                5001,
-                "John Doe",
-                "",
-                "This is a priority project",
-                LocalDate.of(2024, 10, 1),
-                LocalDate.of(2025, 3, 30),
-                null,
-                Arrays.asList(298),
-                Arrays.asList(10,207)
-        );
+        String projectJson1 = """
+            {
+                "name": "Verändertes Projekt",
+                "responsibleEmployeeId": 297,
+                "customerId": 5002,
+                "customerName": "Happy People GmbH",
+                "customerContactName": "Jane Smith",
+                "comment": "High priority project",
+                "startDate": "2024-11-01",
+                "endDate": "2025-04-30",
+                "projectQualificationIds": [
+                 10
+                ]
+            }
+        """;
 
-        ProjectEntity project2 = new ProjectEntity(
-                3,
-                "Project Alpha",
-                297,
-                5001,
-                "John Doe",
-                "",
-                "This is a priority project",
-                LocalDate.of(2024, 10, 1),
-                LocalDate.of(2025, 3, 30),
-                null,
-                Arrays.asList(298),
-                Arrays.asList(10,207)
-        );
-
-        var existingProject = projectRepository.save(project1);
-
-        var updatedProject = projectRepository.save(project2);
-
-        this.mockMvc.perform(put("/projects/{id}", existingProject.getId())
+        this.mockMvc.perform(put("/projects/update/" + testProjectId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedProject))
+                        .content(projectJson1)
+                        .header("Authorization", "Bearer " + token) // Set token here
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("Updated Project A")))
-                .andExpect(jsonPath("$.customerName", is("Updated Customer X")))
-                .andExpect(jsonPath("$.responsibleEmployee", is(102)))
-                .andExpect(jsonPath("$.customer", is(202)))
-                .andExpect(jsonPath("$.description", is("Updated description")));
+                .andExpect(jsonPath("$.name", is("Verändertes Projekt")));
 
-        // Verify that the project is updated in the repository
-        var projectFromDb = projectRepository.findById((int) existingProject.getId()).orElseThrow();
-        assert(projectFromDb.getName().equals("Updated Project A"));
-        assert(projectFromDb.getCustomerContactName().equals("Updated Customer X"));
+        var projectFromDb = projectRepository.findById((int) testProjectId).orElseThrow();
+        Assertions.assertEquals("Verändertes Projekt", projectFromDb.getName());
+    }
+
+
+    @Test
+    @WithMockUser(roles = "admin")
+    void updateNonExistingProject() throws Exception {
+
+        String projectJson1 = """
+            {
+                "name": "Verändertes Projekt",
+                "responsibleEmployeeId": 297,
+                "customerId": 5002,
+                "customerName": "Happy People GmbH",
+                "customerContactName": "Jane Smith",
+                "comment": "High priority project",
+                "startDate": "2024-11-01",
+                "endDate": "2025-04-30",
+                "projectQualificationIds": [
+                 10
+                ]
+            }
+        """;
+
+        this.mockMvc.perform(put("/projects/update/" + 579)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(projectJson1)
+                        .header("Authorization", "Bearer " + token) // Set token here
+                        .with(csrf()))
+                .andExpect(status().isNoContent());
+
     }
 
 }

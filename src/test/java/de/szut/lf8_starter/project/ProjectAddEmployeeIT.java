@@ -1,65 +1,65 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.testcontainers.AbstractIntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.time.LocalDate;
-import java.util.Arrays;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private String token;
+    private int testProjectId = 1;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        this.token = Util.fetchAccessToken();
+        Util.createProjectTestData(projectRepository, testProjectId);
+    }
+
 
     @Test
     void authorization() throws Exception {
-        this.mockMvc.perform(post("/addEmployeeInProject/{projectId}/", 1)
-                        .param("employeeId", "1")
-                        .param("qualificationId", "1")
+        String employeeJson1 = """
+            {
+                "employeeId": 297,
+                "projectId": 1,
+                "skillsId": [
+                 10
+                ]
+            }
+        """;
+
+        this.mockMvc.perform(post("/addEmployeeInProject", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(employeeJson1)
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @WithMockUser(roles = "admin")
+    @WithMockUser(roles = "user")
     void addEmployeeInProject() throws Exception {
+        String employeeJson1 = """
+            {
+                "employeeId": 297,
+                "projectId": 1,
+                "skillsId": [
+                 10
+                ]
+            }
+        """;
 
-        ProjectEntity project2 = new ProjectEntity(
-                1,
-                "Project Beta",
-                102,
-                5002,
-                "Jane Smith",
-                "Follow-up project",
-                "",
-                LocalDate.of(2024, 11, 1),
-                LocalDate.of(2025, 4, 30),
-                null,
-                Arrays.asList(104, 105),
-                Arrays.asList(1, 2)
-        );
-
-        this.mockMvc.perform(post("/projects/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(project2))
-                .with(csrf()));
-
-        long projectId = 1L;
-        long employeeId = 101L;
-        long qualificationId = 201L;
-
-        this.mockMvc.perform(post("/addEmployeeInProject/{projectId}/", projectId)
-                        .param("employeeId", String.valueOf(employeeId))
-                        .param("qualificationId", String.valueOf(qualificationId))
+        this.mockMvc.perform(post("/addEmployeeInProject", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(employeeJson1)
+                        .header("Authorization", "Bearer " + token) // Set token here
                         .with(csrf()))
-                .andExpect(status().isOk());
-
-        // Additional checks can be added to verify that the employee was added
+                .andExpect(status().isCreated());
     }
 }
