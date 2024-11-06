@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.exceptionHandling.ResourceAlreadyExistsException;
 import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.dto.GetProjectsByEmployeeIdDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
@@ -73,13 +74,18 @@ public class ProjectService {
     public ProjectGetDTO findById(Integer id){
         Optional<ProjectEntity> entity = this.repository.findById(id);
         if (entity.isEmpty()) {
-            return null;
+                throw new ResourceNotFoundException("Es wurden keine Projekte gefunden.");
         }
         return this.projectMapper.projectEntityToDTO(entity.get());
     }
 
     public boolean addEmployeeToProject(AddEmployeeToProject addEmployeeToProject, String token) {
         Optional<ProjectEntity> projectEntityOpt = repository.findById(addEmployeeToProject.getProjectId());
+
+        List<Integer> allEmployees = findAllEmployeesByProject(addEmployeeToProject.getProjectId());
+
+        if (allEmployees.contains(addEmployeeToProject.getEmployeeId())) throw new ResourceAlreadyExistsException("Der Mitarbeiter exestiert bereits im Projekt");
+
         if (projectEntityOpt.isEmpty()) return false;
 
         ProjectEntity project = projectEntityOpt.get();
@@ -89,7 +95,7 @@ public class ProjectService {
 
         boolean isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
         boolean isQualifiedInProject = isQualifiedInProject(addEmployeeToProject.getSkillsId(), project);
-        boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getProjectId(), addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
+        boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
         boolean isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
         boolean isEmployeeAvailable = isEmployeeAvailableInProjectPeriod(
                 addEmployeeToProject.getEmployeeId(),

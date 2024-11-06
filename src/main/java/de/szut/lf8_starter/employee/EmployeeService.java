@@ -44,13 +44,11 @@ public class EmployeeService {
         }
     }
 
-    public boolean isQualifiedInService(Integer projectId, Integer employeeId, Integer qualificationId, String token) {
+    public boolean isQualifiedInService(Integer employeeId, Integer qualificationId, String token) {
         String url = "https://employee.szut.dev/employees/" + employeeId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
-
-        List<Integer> allEmployees = projectService.findAllEmployeesByProject(projectId);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -61,7 +59,6 @@ public class EmployeeService {
             for (int i = 0; i < skillSet.size(); i++){
                 if (result.getSkillSet().get(i).getId().equals(qualificationId)) return true;
             }
-            if (allEmployees.contains(employeeId)) throw new ResourceAlreadyExistsException("Der Mitarbeiter exestiert bereits im Projekt");
             throw new ResourceAlreadyExistsException("Der Mitarbeiter " + employeeId + " hat nicht die benötigten Qualifikationen");
 
         } catch (RestClientException e) {
