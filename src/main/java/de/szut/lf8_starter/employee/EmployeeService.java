@@ -1,6 +1,8 @@
 package de.szut.lf8_starter.employee;
 
 import de.szut.lf8_starter.employee.dto.QualificationDTO;
+import de.szut.lf8_starter.exceptionHandling.ResourceAlreadyExistsException;
+import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.ProjectService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Data
 @Service
@@ -36,15 +40,17 @@ public class EmployeeService {
             QualificationDTO result = restTemplate.exchange(url, HttpMethod.GET, entity, QualificationDTO.class).getBody();
             return result != null;
         } catch (RestClientException e) {
-            throw new RuntimeException("Mitarbeiter kann nicht abgerufen werden: " + e.getMessage(), e);
+            throw new ResourceNotFoundException("Mitarbeiter " + employeeId + " kann nicht abgerufen werden");
         }
     }
 
-    public boolean isQualifiedInService(Integer employeeId, Integer qualificationId, String token) {
+    public boolean isQualifiedInService(Integer projectId, Integer employeeId, Integer qualificationId, String token) {
         String url = "https://employee.szut.dev/employees/" + employeeId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
+
+        List<Integer> allEmployees = projectService.findAllEmployeesByProject(projectId);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -55,7 +61,9 @@ public class EmployeeService {
             for (int i = 0; i < skillSet.size(); i++){
                 if (result.getSkillSet().get(i).getId().equals(qualificationId)) return true;
             }
-            return false;
+            if (allEmployees.contains(employeeId)) throw new ResourceAlreadyExistsException("Der Mitarbeiter exestiert bereits im Projekt");
+            throw new ResourceAlreadyExistsException("Der Mitarbeiter " + employeeId + " hat nicht die benötigten Qualifikationen");
+
         } catch (RestClientException e) {
             throw new RuntimeException("Fehler beim Abrufen des Mitarbeiters: " + e.getMessage(), e);
         }

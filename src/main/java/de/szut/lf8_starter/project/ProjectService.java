@@ -35,7 +35,7 @@ public class ProjectService {
 
             return projectMapper.projectEntityToDTO(projectEntity);
         } else {
-            throw new EntityNotFoundException("Mitarbeiter mit ID " + dto.getResponsibleEmployeeId() + " nicht gefunden.");
+            throw new ResourceNotFoundException("Mitarbeiter mit ID " + dto.getResponsibleEmployeeId() + " nicht gefunden.");
         }
     }
 
@@ -44,7 +44,7 @@ public class ProjectService {
         Optional<ProjectEntity> entityOptional = repository.findById(id);
 
         if (entityOptional.isEmpty())
-            throw new EntityNotFoundException("Projekt mit der ID " + id + " nicht gefunden.");
+            throw new ResourceNotFoundException("Projekt mit der ID " + id + " nicht gefunden.");
         if (!employeeService.checkEmployeeExists(dtoToUpdate.getResponsibleEmployeeId(), token))
             throw new IllegalArgumentException("Verantwortlicher Mitarbeiter existiert nicht.");
 
@@ -89,7 +89,7 @@ public class ProjectService {
 
         boolean isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
         boolean isQualifiedInProject = isQualifiedInProject(addEmployeeToProject.getSkillsId(), project);
-        boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
+        boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getProjectId(), addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
         boolean isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
         boolean isEmployeeAvailable = isEmployeeAvailableInProjectPeriod(
                 addEmployeeToProject.getEmployeeId(),
