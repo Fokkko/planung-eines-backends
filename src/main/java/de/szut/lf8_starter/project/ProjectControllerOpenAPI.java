@@ -106,5 +106,16 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id);
+    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id, String token);
+
+    @Operation(summary = "Finde all Mitarbeiter nach Projekt")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste der Mitarbeiter mit dem angegebenen Projekt",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ProjectGetDTO.class)))}),
+            @ApiResponse(responseCode = "404", description = "Projekt existiert nicht",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
+                    content = @Content)})
+    ResponseEntity<List<ProjectGetDTO>> findAllEmployeesByProject(@PathVariable Integer id, String token);
 }

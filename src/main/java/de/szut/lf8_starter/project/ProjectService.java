@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -125,4 +126,19 @@ public class ProjectService {
                 .map(project -> projectMapper.projectEntityToDTO(project))
                 .collect(Collectors.toList());
     }
+
+    public List<ProjectGetDTO> findAllEmployeesByProject(Integer projectId) {
+        return repository.findById(projectId)
+                .map(project -> project.getEmployeeIds().stream()
+                        .map(employeeId -> {
+                            ProjectGetDTO dto = new ProjectGetDTO();
+                            dto.getEmployeeIds().add(employeeId);
+                            dto.setId(project.getId());
+                            dto.setName(project.getName());
+                            return dto;
+                        })
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+    }
+
 }
