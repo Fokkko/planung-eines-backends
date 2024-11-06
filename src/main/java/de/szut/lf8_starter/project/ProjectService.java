@@ -83,11 +83,12 @@ public class ProjectService {
         if (project.getEmployeeIds() == null)
             project.setEmployeeIds(new ArrayList<>());
 
-        var isQualified = isQualifiedForProject(addEmployeeToProject.getSkillsId(), project);
-        var isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
-        var isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
+        boolean isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
+        boolean isQualifiedInProject = isQualifiedInProject(addEmployeeToProject.getSkillsId(), project);
+        boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
+        boolean isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
 
-        if (isQualified && isEmployeeExists && isEmployeeExistsInProject){
+        if (isQualifiedInProject && isQualifiedInService && isEmployeeExists && isEmployeeExistsInProject){
             project.getEmployeeIds().add(addEmployeeToProject.getEmployeeId());
             repository.save(project);
             return true;
@@ -95,12 +96,12 @@ public class ProjectService {
         return false;
     }
 
-    private boolean isQualifiedForProject(Integer skillId, ProjectEntity project) {
+    private boolean isQualifiedInProject(Integer qualificationId, ProjectEntity project) {
         List<Integer> requiredQualifications = project.getProjectQualificationIds();
 
-        if (requiredQualifications == null || skillId == null)
+        if (requiredQualifications == null || qualificationId == null)
             return false;
-            if (requiredQualifications.contains(skillId)) return true;
+            if (requiredQualifications.contains(qualificationId)) return true;
 
         return false;
     }
