@@ -38,6 +38,7 @@ public class ProjectMapper {
 
         ProjectEntity entity = new ProjectEntity();
         entity.setName(dto.getName());
+        entity.setId(dto.getId());
         entity.setResponsibleEmployeeId(dto.getResponsibleEmployeeId());
         entity.setCustomerId(dto.getCustomerId());
         entity.setCustomerContactName(dto.getCustomerContactName());

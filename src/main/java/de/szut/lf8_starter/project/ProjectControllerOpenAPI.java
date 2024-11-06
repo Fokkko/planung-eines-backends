@@ -37,7 +37,6 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "400", description = "Ungültiges JSON-Format", content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
     ResponseEntity<ProjectGetDTO> update(
-            @Parameter(description = "Die ID des zu aktualisierenden Projekts") @PathVariable Integer id,
             @Parameter(description = "Die neuen Projektinformationen") @RequestBody @Valid ProjectPostDTO projectUpdateDto);
 
 

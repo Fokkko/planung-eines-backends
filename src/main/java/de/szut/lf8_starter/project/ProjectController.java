@@ -5,7 +5,6 @@ import de.szut.lf8_starter.employee.dto.DeleteEmployeeDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -35,10 +34,10 @@ public class ProjectController implements ProjectControllerOpenAPI {
     }
 
     @Override
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ProjectGetDTO> update(@PathVariable Integer id, @RequestBody @Valid ProjectPostDTO projectUpdateDto) {
+    @PutMapping("/update")
+    public ResponseEntity<ProjectGetDTO> update(@RequestBody @Valid ProjectPostDTO projectUpdateDto) {
         String token = getJwtToken();
-        return new ResponseEntity<>(this.service.update(id, projectUpdateDto, token), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.update(projectUpdateDto, token), HttpStatus.OK);
     }
 
     @Override
