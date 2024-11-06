@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,11 +84,17 @@ public class ProjectService {
         if (project.getEmployeeIds() == null)
             project.setEmployeeIds(new ArrayList<>());
 
-        var isQualified = isQualifiedForProject(addEmployeeToProject.getSkillsId(), project);
-        var isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
-        var isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
+        boolean isEmployeeExistsInProject = !project.getEmployeeIds().contains(addEmployeeToProject.getEmployeeId());
+        boolean isQualifiedInProject = isQualifiedInProject(addEmployeeToProject.getSkillsId(), project);
+        boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
+        boolean isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
+        boolean isEmployeeAvailable = isEmployeeAvailableInProjectPeriod(
+                addEmployeeToProject.getEmployeeId(),
+                project.getStartDate(),
+                project.getPlannedEndDate()
+        );
 
-        if (isQualified && isEmployeeExists && isEmployeeExistsInProject){
+        if (isQualifiedInProject && isEmployeeAvailable && isQualifiedInService && isEmployeeExists && isEmployeeExistsInProject){
             project.getEmployeeIds().add(addEmployeeToProject.getEmployeeId());
             repository.save(project);
             return true;
@@ -95,19 +102,28 @@ public class ProjectService {
         return false;
     }
 
-    private boolean isQualifiedForProject(Integer skillId, ProjectEntity project) {
+    private boolean isQualifiedInProject(Integer qualificationId, ProjectEntity project) {
         List<Integer> requiredQualifications = project.getProjectQualificationIds();
 
-        if (requiredQualifications == null || skillId == null)
+        if (requiredQualifications == null || qualificationId == null)
             return false;
-            if (requiredQualifications.contains(skillId)) return true;
+            if (requiredQualifications.contains(qualificationId)) return true;
 
         return false;
     }
 
-    private boolean isQualifiedInEmployeeService(Integer qualificationId){
-        return false;
+    private boolean isEmployeeAvailableInProjectPeriod(Integer employeeId, LocalDate projectStartDate, LocalDate projectEndDate) {
+        List<ProjectEntity> project = repository.findProjectsByEmployeeId(employeeId);
+
+        for (ProjectEntity assignedProject : project) {
+            if (!(assignedProject.getPlannedEndDate().isBefore(projectStartDate) || assignedProject.getStartDate().isAfter(projectEndDate))) {
+                return false;
+            }
+        }
+        return true;
     }
+
+
     public void deleteEmployeeFromProject(Integer pid, Integer eid) {
         Optional<ProjectEntity> entityOptional = this.repository.findById(pid);
 

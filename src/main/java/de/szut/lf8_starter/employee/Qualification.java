@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class Qualification {
-    private Integer skillId;
+//    private String skill;
+    private Integer id;
 }
