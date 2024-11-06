@@ -7,18 +7,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/employees")
-public class EmployeeController {
+public class EmployeeController implements EmployeeControllerOpenAPI{
 
     private final EmployeeService employeeService;
 
+    @Override
     @GetMapping("/{employeeId}")
     public ResponseEntity<Boolean> checkEmployeeExists(@PathVariable Integer employeeId, @RequestHeader (name="Authorization") String token) {
 
         Boolean employee = employeeService.checkEmployeeExists(employeeId, token);
 
-        if (employee == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (employee == null) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(employee);
     }

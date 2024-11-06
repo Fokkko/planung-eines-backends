@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer> {
     List<ProjectEntity> findByEmployeeIdsContains(Integer employeeId);
+    @Query("SELECT p FROM ProjectEntity p WHERE :employeeId MEMBER OF p.employeeIds")
+    List<ProjectEntity> findProjectsByEmployeeId(Integer employeeId);
 }

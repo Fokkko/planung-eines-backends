@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -87,8 +88,13 @@ public class ProjectService {
         boolean isQualifiedInProject = isQualifiedInProject(addEmployeeToProject.getSkillsId(), project);
         boolean isQualifiedInService = employeeService.isQualifiedInService(addEmployeeToProject.getEmployeeId(), addEmployeeToProject.getSkillsId(), token);
         boolean isEmployeeExists = employeeService.checkEmployeeExists(addEmployeeToProject.getEmployeeId(), token);
+        boolean isEmployeeAvailable = isEmployeeAvailableInProjectPeriod(
+                addEmployeeToProject.getEmployeeId(),
+                project.getStartDate(),
+                project.getPlannedEndDate()
+        );
 
-        if (isQualifiedInProject && isQualifiedInService && isEmployeeExists && isEmployeeExistsInProject){
+        if (isQualifiedInProject && isEmployeeAvailable && isQualifiedInService && isEmployeeExists && isEmployeeExistsInProject){
             project.getEmployeeIds().add(addEmployeeToProject.getEmployeeId());
             repository.save(project);
             return true;
@@ -104,6 +110,17 @@ public class ProjectService {
             if (requiredQualifications.contains(qualificationId)) return true;
 
         return false;
+    }
+
+    private boolean isEmployeeAvailableInProjectPeriod(Integer employeeId, LocalDate projectStartDate, LocalDate projectEndDate) {
+        List<ProjectEntity> project = repository.findProjectsByEmployeeId(employeeId);
+
+        for (ProjectEntity assignedProject : project) {
+            if (!(assignedProject.getPlannedEndDate().isBefore(projectStartDate) || assignedProject.getStartDate().isAfter(projectEndDate))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void deleteEmployeeFromProject(Integer pid, Integer eid) {
