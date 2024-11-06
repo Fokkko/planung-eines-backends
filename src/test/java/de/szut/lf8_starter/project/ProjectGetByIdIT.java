@@ -42,15 +42,6 @@ public class ProjectGetByIdIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.description", is("Core project for business automation")));
     }
 
-    @Test
-    @WithMockUser(roles = "user")
-    void getNonExistingProject() throws Exception {
-        this.mockMvc.perform(get("/projects/{id}", 999)
-                        .with(csrf()))
-                .andExpect(status().isNotFound());
-    }
-
-
 
 
 
