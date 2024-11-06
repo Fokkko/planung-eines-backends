@@ -1,6 +1,7 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.employee.dto.DeleteEmployeeDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final ProjectMapper projectMapper;
 
+    // TODO (/deleteEmployee/{projectId}/{employeeId} check RequestParam) & Qualifikation ist falsch
     @Override
     @PostMapping("/create")
     public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto,
@@ -64,25 +66,21 @@ public class ProjectController implements ProjectControllerOpenAPI {
         if (isAdded) {
             return new ResponseEntity<>(addEmployeeToProject, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
-    @DeleteMapping("/deleteEmployee/{projectId}/{employeeId}")
-    public ResponseEntity<Void> deleteEmployeeFromProject(@PathVariable Integer projectId,
-                                                          @PathVariable Integer employeeId) {
-        this.service.deleteEmployeeFromProject(projectId, employeeId);
+    @DeleteMapping("/deleteEmployee")
+    public ResponseEntity<Void> deleteEmployeeFromProject(@RequestBody DeleteEmployeeDTO deleteEmployeeDTO) {
+        this.service.deleteEmployeeFromProject(deleteEmployeeDTO.getProjectId(), deleteEmployeeDTO.getEmployeeId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    @GetMapping("/findByQualification")
-    public ResponseEntity<List<ProjectGetDTO>> findAllEmployeesByQualification(@RequestParam String qualificationMessage) {
-//        List<ProjectGetDTO> projects = service.findProjectsByQualification(qualificationMessage);
-//        if (projects.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(projects, HttpStatus.OK);
+    @GetMapping("/findByQualification/{id}")
+    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id,  @RequestHeader(name = "Authorization") String token) {
+
         return null;
     }
+
 }

@@ -36,13 +36,11 @@ public class ProjectService {
         }
     }
 
-    // TODO: 405 Not Allowed Method
     public ProjectGetDTO update(Integer id, ProjectPostDTO dtoToUpdate, String token) {
         Optional<ProjectEntity> entityOptional = repository.findById(id);
 
         if (entityOptional.isEmpty())
             throw new EntityNotFoundException("Projekt mit der ID " + id + " nicht gefunden.");
-        ProjectEntity existingEntity = entityOptional.get();
         if (!employeeService.checkEmployeeExists(dtoToUpdate.getResponsibleEmployeeId(), token))
             throw new IllegalArgumentException("Verantwortlicher Mitarbeiter existiert nicht.");
 
@@ -76,7 +74,7 @@ public class ProjectService {
 
     public boolean addEmployeeToProject(AddEmployeeToProject addEmployeeToProject, String token) {
         Optional<ProjectEntity> projectEntityOpt = repository.findById(addEmployeeToProject.getProjectId());
-        if (!projectEntityOpt.isPresent()) return false;
+        if (projectEntityOpt.isEmpty()) return false;
 
         ProjectEntity project = projectEntityOpt.get();
 
@@ -95,20 +93,19 @@ public class ProjectService {
         return false;
     }
 
-    private boolean isQualifiedForProject(List<Integer> skillIds, ProjectEntity project) {
+    private boolean isQualifiedForProject(Integer skillId, ProjectEntity project) {
         List<Integer> requiredQualifications = project.getProjectQualificationIds();
 
-        if (requiredQualifications == null || skillIds == null)
+        if (requiredQualifications == null || skillId == null)
             return false;
+            if (requiredQualifications.contains(skillId)) return true;
 
-        for (Integer skillId : skillIds) {
-            if (requiredQualifications.contains(skillId))
-                return true;
-        }
         return false;
     }
 
-
+    private boolean isQualifiedInEmployeeService(Integer qualificationId){
+        return false;
+    }
     public void deleteEmployeeFromProject(Integer pid, Integer eid) {
         Optional<ProjectEntity> entityOptional = this.repository.findById(pid);
 
@@ -124,13 +121,8 @@ public class ProjectService {
         }
     }
 
+    public List<ProjectGetDTO> findAllProjectsByEmployee(Integer employeeId) {
 
-    public List<ProjectGetDTO> findAllEmployeesByQualification(String message) {
-//        // Assuming you have a method in the repository to find projects by qualification
-//        List<ProjectEntity> projects = this.repository.findByQualification(message);
-//        return projects.stream()
-//                .map(ProjectMapper.INSTANCE::projectEntityToDTO)
-//                .collect(Collectors.toList());
         return null;
     }
 }
