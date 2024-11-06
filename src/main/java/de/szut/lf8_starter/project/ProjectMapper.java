@@ -15,12 +15,10 @@ public class ProjectMapper {
         }
 
         ProjectGetDTO dto = new ProjectGetDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
+        dto.setProjectId(entity.getId());
+        dto.setProjectName(entity.getName());
         dto.setResponsibleEmployee(entity.getResponsibleEmployeeId());
         dto.setCustomerId(entity.getCustomerId());
-        dto.setCustomerContactName(entity.getCustomerContactName());
-        dto.setDescription(entity.getComment());
         dto.setStartDate(entity.getStartDate());
         dto.setPlannedDate(entity.getPlannedEndDate());
         dto.setCustomerName(entity.getCustomerName());

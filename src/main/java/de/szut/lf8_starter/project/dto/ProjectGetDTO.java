@@ -13,18 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 public class ProjectGetDTO {
 
-    private long id;
+    private long projectId;
 
-    private String name;
+    private String projectName;
 
     private Integer responsibleEmployee;
     private Integer customerId;
-
     private String customerName;
-    private String customerContactName;
-
-    private String description;
-
+    private String comment;
     private LocalDate startDate;
     private LocalDate plannedDate;
     private LocalDate endDate;
