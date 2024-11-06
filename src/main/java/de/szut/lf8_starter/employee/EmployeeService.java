@@ -1,6 +1,6 @@
 package de.szut.lf8_starter.employee;
 
-import de.szut.lf8_starter.employee.dto.SkillDTO;
+import de.szut.lf8_starter.employee.dto.QualificationDTO;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +26,7 @@ public class EmployeeService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            SkillDTO result = restTemplate.exchange(url, HttpMethod.GET, entity, SkillDTO.class).getBody();
+            QualificationDTO result = restTemplate.exchange(url, HttpMethod.GET, entity, QualificationDTO.class).getBody();
 
             return result != null;
         } catch (RestClientException e) {

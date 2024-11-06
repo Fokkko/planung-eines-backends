@@ -1,6 +1,7 @@
 package de.szut.lf8_starter.project;
 
-import de.szut.lf8_starter.project.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.employee.dto.DeleteEmployeeDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import jakarta.validation.Valid;
@@ -18,12 +19,11 @@ import java.util.List;
 @RequestMapping(value = "projects")
 @PreAuthorize("hasAnyAuthority('user')")
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final ProjectMapper projectMapper;
 
+    // TODO (/deleteEmployee/{projectId}/{employeeId} check RequestParam) & Qualifikation ist falsch
     @Override
     @PostMapping("/create")
     public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto,
@@ -66,25 +66,28 @@ public class ProjectController implements ProjectControllerOpenAPI {
         if (isAdded) {
             return new ResponseEntity<>(addEmployeeToProject, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
-    @DeleteMapping("/deleteEmployee/{projectId}/{employeeId}")
-    public ResponseEntity<Void> deleteEmployeeFromProject(@PathVariable Integer projectId,
-                                                          @PathVariable Integer employeeId) {
-        this.service.deleteEmployeeFromProject(projectId, employeeId);
+    @DeleteMapping("/deleteEmployee")
+    public ResponseEntity<Void> deleteEmployeeFromProject(@RequestBody DeleteEmployeeDTO deleteEmployeeDTO) {
+        this.service.deleteEmployeeFromProject(deleteEmployeeDTO.getProjectId(), deleteEmployeeDTO.getEmployeeId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    @GetMapping("/findByQualification")
-    public ResponseEntity<List<ProjectGetDTO>> findAllEmployeesByQualification(@RequestParam String qualificationMessage) {
-//        List<ProjectGetDTO> projects = service.findProjectsByQualification(qualificationMessage);
-//        if (projects.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(projects, HttpStatus.OK);
-        return null;
+    @GetMapping("/findAllProjectsByEmployee/{employeeId}")
+    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer employeeId, @RequestHeader(name = "Authorization") String token) {
+        var getAllProjectsByEmployee = this.service.findAllProjectsByEmployee(employeeId);
+        return new ResponseEntity<>(getAllProjectsByEmployee, HttpStatus.OK);
     }
+    @Override
+    @GetMapping("/findAllEmployeesByProject/{projectId}")
+    public ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer projectId,
+                                                                   @RequestHeader(name = "Authorization") String token) {
+        var getAllEmployeesByProject = this.service.findAllEmployeesByProject(projectId);
+        return new ResponseEntity<>(getAllEmployeesByProject, HttpStatus.OK);
+    }
+
 }
