@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import jakarta.persistence.EntityNotFoundException;
@@ -57,6 +58,8 @@ public class ProjectService {
         var entity = this.repository.findById(id);
         if (entity.isPresent()){
             this.repository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Projekt mit der ID " + id + " nicht gefunden.");
         }
     }
 
@@ -133,9 +136,11 @@ public class ProjectService {
             if (entity.getEmployeeIds() != null && entity.getEmployeeIds().contains(eid)) {
                 entity.getEmployeeIds().remove(eid);
                 this.repository.save(entity);
+            } else {
+                throw new ResourceNotFoundException("Mitarbeiter mit der ID " + eid + " nicht gefunden.");
             }
         } else {
-            throw new EntityNotFoundException("Projekt mit der ID " + pid + " nicht gefunden.");
+            throw new ResourceNotFoundException("Projekt mit der ID " + pid + " nicht gefunden.");
         }
     }
 
