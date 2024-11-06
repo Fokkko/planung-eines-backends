@@ -10,10 +10,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/employees")
-public class EmployeeController {
+public class EmployeeController implements EmployeeControllerOpenAPI{
 
     private final EmployeeService employeeService;
 
+    @Override
     @GetMapping("/{employeeId}")
     public ResponseEntity<Boolean> checkEmployeeExists(@PathVariable Integer employeeId) {
 
@@ -21,9 +22,7 @@ public class EmployeeController {
 
         Boolean employee = employeeService.checkEmployeeExists(employeeId, token);
 
-        if (employee == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (employee == null) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(employee);
     }

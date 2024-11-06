@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class QualificationDTO {
-    private Integer employeeId;
-    private List<Qualification> skillIds;
+//    private Integer employeeId;
+    private List<Qualification> skillSet;
 
 }

@@ -26,7 +26,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final ProjectMapper projectMapper;
 
-    // TODO (/deleteEmployee/{projectId}/{employeeId} check RequestParam) & Qualifikation ist falsch
+    // TODO Mitarbeiter verplanen fehlt!
     @Override
     @PostMapping("/create")
     public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto) {
