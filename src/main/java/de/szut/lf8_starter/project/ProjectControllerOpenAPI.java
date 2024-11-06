@@ -26,7 +26,7 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<ProjectGetDTO> create(ProjectPostDTO projectPostDto, String token);
+    ResponseEntity<ProjectGetDTO> create(ProjectPostDTO projectPostDto);
 
     @Operation(summary = "Aktualisiert ein Projekt mit der angegebenen ID")
     @ApiResponses(value = {
@@ -37,7 +37,7 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<ProjectGetDTO> update (Integer id, @RequestBody @Valid ProjectPostDTO projectUpdateDto, String token);
+    ResponseEntity<ProjectGetDTO> update (Integer id, @RequestBody @Valid ProjectPostDTO projectUpdateDto);
 
     @Operation(summary = "Löscht ein Projekt anhand der ID")
     @ApiResponses(value = {
