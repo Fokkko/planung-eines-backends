@@ -6,7 +6,6 @@ import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
