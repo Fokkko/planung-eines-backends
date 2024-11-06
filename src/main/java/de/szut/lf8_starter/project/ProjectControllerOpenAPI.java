@@ -30,6 +30,7 @@ public interface ProjectControllerOpenAPI {
             @Parameter(description = "Die Daten des zu erstellenden Projekts") @RequestBody @Valid ProjectPostDTO projectPostDto,
             @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
 
+
     @Operation(summary = "Aktualisiert ein Projekt mit der angegebenen ID",
             description = "Aktualisiert ein Projekt anhand der ID mit den neuen Informationen.")
     @ApiResponses(value = {
@@ -41,6 +42,7 @@ public interface ProjectControllerOpenAPI {
             @Parameter(description = "Die ID des zu aktualisierenden Projekts") @PathVariable Integer id,
             @Parameter(description = "Die neuen Projektinformationen") @RequestBody @Valid ProjectPostDTO projectUpdateDto,
             @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
+
 
     @Operation(summary = "Löscht ein Projekt anhand der ID",
             description = "Löscht das Projekt mit der angegebenen ID.")

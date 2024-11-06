@@ -11,6 +11,9 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +22,6 @@ import java.util.List;
 @RequestMapping(value = "projects")
 @PreAuthorize("hasAnyAuthority('user')")
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final ProjectMapper projectMapper;
@@ -28,16 +29,16 @@ public class ProjectController implements ProjectControllerOpenAPI {
     // TODO Mitarbeiter verplanen fehlt!
     @Override
     @PostMapping("/create")
-    public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto,
-                                                @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto) {
+        String token = getJwtToken();
         return new ResponseEntity<>(this.service.create(projectCreateDto, token), HttpStatus.CREATED);
     }
 
     @Override
     @PutMapping("/update/{id}")
     public ResponseEntity<ProjectGetDTO> update(@PathVariable Integer id,
-                                                @RequestBody @Valid ProjectPostDTO projectUpdateDto,
-                                                @RequestHeader(name = "Authorization") String token) {
+                                                @RequestBody @Valid ProjectPostDTO projectUpdateDto) {
+        String token = getJwtToken();
         return new ResponseEntity<>(this.service.update(id, projectUpdateDto, token), HttpStatus.OK);
     }
 
@@ -84,6 +85,17 @@ public class ProjectController implements ProjectControllerOpenAPI {
         var getAllProjectsByEmployee = this.service.findAllProjectsByEmployee(employeeId);
         return new ResponseEntity<>(getAllProjectsByEmployee, HttpStatus.OK);
     }
+
+
+    private String getJwtToken() {
+        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            Jwt jwt = (Jwt) authentication.getToken();
+            return "Bearer " + jwt.getTokenValue();
+        }
+        return null;
+    }
+
     @Override
     @GetMapping("/findAllEmployeesByProject/{projectId}")
     public ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer projectId,
@@ -91,5 +103,6 @@ public class ProjectController implements ProjectControllerOpenAPI {
         var getAllEmployeesByProject = this.service.findAllEmployeesByProject(projectId);
         return new ResponseEntity<>(getAllEmployeesByProject, HttpStatus.OK);
     }
+
 
 }
