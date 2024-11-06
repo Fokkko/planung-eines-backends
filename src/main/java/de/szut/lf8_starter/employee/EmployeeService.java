@@ -60,17 +60,5 @@ public class EmployeeService {
             throw new RuntimeException("Fehler beim Abrufen des Mitarbeiters: " + e.getMessage(), e);
         }
     }
-
-
-//    private String getJwtToken() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth instanceof JwtAuthenticationToken) {
-//            JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) auth;
-//            Jwt jwt = jwtAuthenticationToken.getToken();
-//            String tokenValue = jwt.getTokenValue();
-//            return "Bearer " + tokenValue;
-//        }
-//        return "JWT Token Not found";
-//    }
 }
 
