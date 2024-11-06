@@ -30,7 +30,7 @@ public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
                 "employeeId": 297,
                 "projectId": 1,
                 "skillsId": [
-                 10
+                 207
                 ]
             }
         """;
@@ -50,7 +50,7 @@ public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
                 "employeeId": 297,
                 "projectId": 1,
                 "skillsId": [
-                 10
+                 207
                 ]
             }
         """;
