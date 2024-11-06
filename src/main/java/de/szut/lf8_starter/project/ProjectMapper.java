@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectMapper {
 
-    public ProjectGetDTO ProjectEntityToProjectByEmoloyeeIdDto(ProjectEntity entity) {
+    public ProjectGetDTO projectEntityToDTO(ProjectEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -53,7 +53,7 @@ public class ProjectMapper {
         return entity;
     }
 
-    public GetProjectsByEmployeeIdDTO ProjectEntityToProjectByEmoloyeeIdDto(ProjectEntity project, Integer employeeId) {
+    public GetProjectsByEmployeeIdDTO ProjectEntityToProjectByEmployeeIdDto(ProjectEntity project, Integer employeeId) {
         GetProjectsByEmployeeIdDTO dto = new GetProjectsByEmployeeIdDTO();
         dto.setEmployeeId(employeeId);
         dto.setProjectId(project.getId());

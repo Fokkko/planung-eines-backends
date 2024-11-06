@@ -3,6 +3,7 @@ package de.szut.lf8_starter.project;
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
+import de.szut.lf8_starter.project.dto.GetProjectsByEmployeeIdDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import jakarta.persistence.EntityNotFoundException;
@@ -143,10 +144,10 @@ public class ProjectService {
         }
     }
 
-    public List<ProjectGetDTO> findAllProjectsByEmployee(Integer employeeId) {
+    public List<GetProjectsByEmployeeIdDTO> findAllProjectsByEmployee(Integer employeeId) {
         List<ProjectEntity> projects = this.repository.findByEmployeeIdsContains(employeeId);
         return projects.stream()
-                .map(project -> projectMapper.projectEntityToDTO(project))
+                .map(project -> projectMapper.ProjectEntityToProjectByEmployeeIdDto(project, employeeId))
                 .collect(Collectors.toList());
     }
 
