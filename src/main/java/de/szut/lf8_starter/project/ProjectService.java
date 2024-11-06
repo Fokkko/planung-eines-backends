@@ -103,6 +103,9 @@ public class ProjectService {
         return false;
     }
 
+    private boolean isQualifiedInEmployeeService(Integer qualificationId){
+        return false;
+    }
     public void deleteEmployeeFromProject(Integer pid, Integer eid) {
         Optional<ProjectEntity> entityOptional = this.repository.findById(pid);
 
