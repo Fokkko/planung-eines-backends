@@ -30,12 +30,12 @@ public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
                 "employeeId": 297,
                 "projectId": 1,
                 "skillsId": [
-                 10
+                 207
                 ]
             }
         """;
 
-        this.mockMvc.perform(post("/addEmployeeInProject", 1)
+        this.mockMvc.perform(post("/project/addEmployeeInProject", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson1)
                         .with(csrf()))
@@ -50,12 +50,12 @@ public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
                 "employeeId": 297,
                 "projectId": 1,
                 "skillsId": [
-                 10
+                 207
                 ]
             }
         """;
 
-        this.mockMvc.perform(post("/addEmployeeInProject", 1)
+        this.mockMvc.perform(post("/project/addEmployeeInProject", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson1)
                         .header("Authorization", "Bearer " + token) // Set token here

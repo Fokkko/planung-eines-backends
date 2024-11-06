@@ -49,7 +49,7 @@ public class Util {
                 LocalDate.of(2024, 12, 1),
                 LocalDate.of(2025, 3, 30),
                 null,
-                Arrays.asList(207, 208, 103),
+                Arrays.asList(300, 208, 103),
                 Arrays.asList(10, 207)
         );
 
@@ -66,7 +66,7 @@ public class Util {
                 LocalDate.of(2024, 11, 1),
                 LocalDate.of(2025, 4, 30),
                 null,
-                Arrays.asList(207, 103),
+                Arrays.asList(297, 300),
                 Arrays.asList(10)
         );
 

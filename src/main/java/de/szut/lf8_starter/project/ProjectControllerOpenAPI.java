@@ -79,8 +79,7 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
     @PostMapping("/addEmployeeInProject")
     ResponseEntity<AddEmployeeToProject> addEmployeeInProject(
-            @Parameter(description = "Die zu hinzufügende Mitarbeiter-ID und Projekt-ID") @RequestBody @Valid AddEmployeeToProject addEmployeeToProject,
-            @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
+            @Parameter(description = "Die zu hinzufügende Mitarbeiter-ID und Projekt-ID") @RequestBody @Valid AddEmployeeToProject addEmployeeToProject);
 
     @Operation(summary = "Entfernt einen Mitarbeiter aus einem Projekt",
             description = "Entfernt den angegebenen Mitarbeiter aus dem Projekt.")
@@ -100,8 +99,7 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "404", description = "Mitarbeiter existiert nicht", content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
     ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(
-            @Parameter(description = "Die ID des Mitarbeiters") @PathVariable Integer employeeId,
-            @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
+            @Parameter(description = "Die ID des Mitarbeiters") @PathVariable Integer employeeId);
 
     @Operation(summary = "Finde alle Mitarbeiter nach Projekt",
             description = "Gibt eine Liste aller Mitarbeiter zurück, die dem angegebenen Projekt zugeordnet sind.")
@@ -111,6 +109,5 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "404", description = "Projekt existiert nicht", content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
     ResponseEntity<List<Integer>> findAllEmployeesByProject(
-            @Parameter(description = "Die ID des Projekts") @PathVariable Integer projectId,
-            @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
+            @Parameter(description = "Die ID des Projekts") @PathVariable Integer projectId);
 }

@@ -61,8 +61,8 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @Override
     @PostMapping("/addEmployeeInProject")
-    public ResponseEntity<AddEmployeeToProject> addEmployeeInProject(@RequestBody @Valid AddEmployeeToProject addEmployeeToProject,
-                                                                     @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<AddEmployeeToProject> addEmployeeInProject(@RequestBody @Valid AddEmployeeToProject addEmployeeToProject) {
+        String token = getJwtToken();
         boolean isAdded = service.addEmployeeToProject(addEmployeeToProject, token);
         if (isAdded) {
             return new ResponseEntity<>(addEmployeeToProject, HttpStatus.CREATED);
@@ -79,7 +79,8 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @Override
     @GetMapping("/findAllProjectsByEmployee/{employeeId}")
-    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer employeeId, @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer employeeId) {
+        String token = getJwtToken();
         var getAllProjectsByEmployee = this.service.findAllProjectsByEmployee(employeeId);
         return new ResponseEntity<>(getAllProjectsByEmployee, HttpStatus.OK);
     }
@@ -96,8 +97,8 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @Override
     @GetMapping("/findAllEmployeesByProject/{projectId}")
-    public ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer projectId,
-                                                                   @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer projectId) {
+        String token = getJwtToken();
         var getAllEmployeesByProject = this.service.findAllEmployeesByProject(projectId);
         return new ResponseEntity<>(getAllEmployeesByProject, HttpStatus.OK);
     }
