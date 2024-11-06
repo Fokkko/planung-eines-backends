@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.is;
 
-public class ProjectGetEmployeeByProject extends AbstractIntegrationTest {
+public class ProjectGetByEmployee extends AbstractIntegrationTest {
 
     private int testProjectId = 1;
 
@@ -23,16 +23,16 @@ public class ProjectGetEmployeeByProject extends AbstractIntegrationTest {
 
     @Test
     void authorization() throws Exception {
-        this.mockMvc.perform(get("/projects/findAllEmployeesByProject/{projectId}", testProjectId)
+        this.mockMvc.perform(get("/projects/findAllProjectsByEmployee/{employeeId}", 297)
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "user")
-    void getEmployeesByProjectId() throws Exception {
+    void getProjectByEmployee() throws Exception {
 
-        this.mockMvc.perform(get("/projects/findAllEmployeesByProject/{projectId}", testProjectId)
+        this.mockMvc.perform(get("/projects/findAllProjectsByEmployee/{employeeId}", 297)
                         .with(csrf()))
                 .andExpect(status().isOk());
     }

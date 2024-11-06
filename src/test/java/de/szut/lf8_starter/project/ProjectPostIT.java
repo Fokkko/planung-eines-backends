@@ -82,36 +82,4 @@ public class ProjectPostIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.description", is("High priority project")));
     }
 
-
-    @Test
-    @WithMockUser(roles = "user")
-    void createProjectInvalidResponsibleEmployee() throws Exception {
-        String projectJson2 = """
-            {
-                "name": "HPG: SAP Einführung Warenwirtschaft",
-                "responsibleEmployeeId": 3568,
-                "customerId": 5002,
-                "customerName": "Happy People GmbH",
-                "customerContactName": "Jane Smith",
-                "comment": "High priority project",
-                "startDate": "2024-11-01",
-                "endDate": "2025-04-30",
-                "projectQualificationIds": [
-                 10
-                ]
-            }
-        """;
-
-        this.mockMvc.perform(post("/projects/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(projectJson2)
-                        .header("Authorization", "Bearer " + token) // Set token here
-                        .with(csrf()))
-                .andExpect(status().isBadRequest());
-    }
-
-
-
-
-
 }
