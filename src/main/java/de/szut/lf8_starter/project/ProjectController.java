@@ -19,8 +19,6 @@ import java.util.List;
 @RequestMapping(value = "projects")
 @PreAuthorize("hasAnyAuthority('user')")
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final ProjectMapper projectMapper;
