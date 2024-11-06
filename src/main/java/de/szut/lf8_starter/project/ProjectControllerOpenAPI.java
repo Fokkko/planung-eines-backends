@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface ProjectControllerOpenAPI {
 
-    @Operation(summary = "Erstellt ein neues Projekt mit seiner ID und den Details")
+    @Operation(summary = "Erstellt ein neues Projekt")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Projekt erfolgreich erstellt",
                     content = {@Content(mediaType = "application/json",
@@ -106,5 +106,16 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id,  @RequestHeader(name = "Authorization") String token);
+    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id, String token);
+
+    @Operation(summary = "Finde all Mitarbeiter nach Projekt")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste der Mitarbeiter mit dem angegebenen Projekt",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ProjectGetDTO.class)))}),
+            @ApiResponse(responseCode = "404", description = "Projekt existiert nicht",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
+                    content = @Content)})
+    ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer id, String token);
 }
