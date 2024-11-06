@@ -1,7 +1,6 @@
 package de.szut.lf8_starter.customer;
 
 import de.szut.lf8_starter.customer.customerDto.CustomerResponseDto;
-import de.szut.lf8_starter.employee.dto.SkillDTO;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
