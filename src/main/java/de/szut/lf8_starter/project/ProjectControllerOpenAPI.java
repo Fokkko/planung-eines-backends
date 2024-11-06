@@ -117,5 +117,5 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<List<ProjectGetDTO>> findAllEmployeesByProject(@PathVariable Integer id, String token);
+    ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer id, String token);
 }

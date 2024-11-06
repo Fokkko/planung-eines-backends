@@ -127,18 +127,12 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProjectGetDTO> findAllEmployeesByProject(Integer projectId) {
+    public List<Integer> findAllEmployeesByProject(Integer projectId) {
         return repository.findById(projectId)
-                .map(project -> project.getEmployeeIds().stream()
-                        .map(employeeId -> {
-                            ProjectGetDTO dto = new ProjectGetDTO();
-                            dto.getEmployeeIds().add(employeeId);
-                            dto.setId(project.getId());
-                            dto.setName(project.getName());
-                            return dto;
-                        })
-                        .collect(Collectors.toList()))
+                .map(ProjectEntity::getEmployeeIds)
                 .orElse(Collections.emptyList());
+
+
     }
 
 }
