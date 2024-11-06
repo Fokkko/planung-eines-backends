@@ -63,7 +63,7 @@ class KeycloakSecurityConfig {
                 .hasRole("user")
                 .requestMatchers(new AntPathRequestMatcher("/roles"))
                 .authenticated()
-                .requestMatchers(new AntPathRequestMatcher("/projects/**")).hasRole("user")
+                .requestMatchers(new AntPathRequestMatcher("//**")).hasRole("user")
                 .requestMatchers(new AntPathRequestMatcher("/"))
                 .permitAll()
                 .anyRequest()

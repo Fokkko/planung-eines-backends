@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ProjectPostDTO {
+    private Integer id;
 
     private Integer responsibleEmployeeId;
 

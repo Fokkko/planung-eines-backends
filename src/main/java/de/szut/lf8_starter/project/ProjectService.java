@@ -22,14 +22,13 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
     private final EmployeeService employeeService;
 
+// TODO Update false
 
     public ProjectGetDTO create(ProjectPostDTO dto, String token) {
 
         if (employeeService.checkEmployeeExists(dto.getResponsibleEmployeeId(), token)) {
 
             ProjectEntity projectEntity = projectMapper.projectDTOToEntity(dto);
-
-//            projectEntity.setEmployeeIds(dto.getEmployeeIds());
 
             repository.save(projectEntity);
 
@@ -39,7 +38,8 @@ public class ProjectService {
         }
     }
 
-    public ProjectGetDTO update(Integer id, ProjectPostDTO dtoToUpdate, String token) {
+    public ProjectGetDTO update(ProjectPostDTO dtoToUpdate, String token) {
+        var id = dtoToUpdate.getId();
         Optional<ProjectEntity> entityOptional = repository.findById(id);
 
         if (entityOptional.isEmpty())
