@@ -24,8 +24,7 @@ public interface CustomerControllerOpenAPI {
     })
     @PostMapping
     ResponseEntity<CustomerResponseDto> createCustomer(
-            @RequestBody CustomerRequestDto customerRequest,
-            @RequestHeader(name = "Authorization") String token);
+            @RequestBody CustomerRequestDto customerRequest);
 
     @Operation(summary = "Gibt den Kunden mit der angegebenen ID zurück")
     @ApiResponses(value = {
@@ -39,8 +38,7 @@ public interface CustomerControllerOpenAPI {
     })
     @GetMapping("/{customerId}")
     ResponseEntity<CustomerResponseDto> getCustomerById(
-            @PathVariable Integer customerId,
-            @RequestHeader(name = "Authorization") String token);
+            @PathVariable Integer customerId);
 
     @Operation(summary = "Aktualisiert die Daten eines bestehenden Kunden")
     @ApiResponses(value = {
@@ -57,8 +55,7 @@ public interface CustomerControllerOpenAPI {
     @PutMapping("/{customerId}")
     ResponseEntity<CustomerResponseDto> updateCustomer(
             @PathVariable Integer customerId,
-            @RequestBody CustomerRequestDto customerRequest,
-            @RequestHeader(name = "Authorization") String token);
+            @RequestBody CustomerRequestDto customerRequest);
 
     @Operation(summary = "Löscht einen Kunden anhand der ID")
     @ApiResponses(value = {
@@ -71,6 +68,5 @@ public interface CustomerControllerOpenAPI {
     })
     @DeleteMapping("/{customerId}")
     ResponseEntity<Void> deleteCustomer(
-            @PathVariable Integer customerId,
-            @RequestHeader(name = "Authorization") String token);
+            @PathVariable Integer customerId);
 }

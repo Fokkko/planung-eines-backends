@@ -22,7 +22,6 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
     private final EmployeeService employeeService;
 
-// TODO Update false
 
     public ProjectGetDTO create(ProjectPostDTO dto, String token) {
 
