@@ -1,4 +1,4 @@
-package de.szut.lf8_starter.project.dto;
+package de.szut.lf8_starter.employee.dto;
 
 import lombok.Data;
 
@@ -8,5 +8,5 @@ import java.util.List;
 public class AddEmployeeToProject {
     private Integer employeeId;
     private Integer projectId;
-    private List<Integer> skillsId;
+    private Integer skillsId;
 }
