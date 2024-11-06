@@ -36,8 +36,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @Override
     @PutMapping("/update/{id}")
-    public ResponseEntity<ProjectGetDTO> update(@PathVariable Integer id,
-                                                @RequestBody @Valid ProjectPostDTO projectUpdateDto) {
+    public ResponseEntity<ProjectGetDTO> update(@PathVariable Integer id, @RequestBody @Valid ProjectPostDTO projectUpdateDto) {
         String token = getJwtToken();
         return new ResponseEntity<>(this.service.update(id, projectUpdateDto, token), HttpStatus.OK);
     }

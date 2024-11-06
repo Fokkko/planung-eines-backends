@@ -27,9 +27,7 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "400", description = "Ungültiges JSON-Format", content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
     ResponseEntity<ProjectGetDTO> create(
-            @Parameter(description = "Die Daten des zu erstellenden Projekts") @RequestBody @Valid ProjectPostDTO projectPostDto,
-            @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
-
+            @Parameter(description = "Die Daten des zu erstellenden Projekts") @RequestBody @Valid ProjectPostDTO projectPostDto);
 
     @Operation(summary = "Aktualisiert ein Projekt mit der angegebenen ID",
             description = "Aktualisiert ein Projekt anhand der ID mit den neuen Informationen.")
@@ -40,8 +38,7 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
     ResponseEntity<ProjectGetDTO> update(
             @Parameter(description = "Die ID des zu aktualisierenden Projekts") @PathVariable Integer id,
-            @Parameter(description = "Die neuen Projektinformationen") @RequestBody @Valid ProjectPostDTO projectUpdateDto,
-            @Parameter(description = "JWT Token für die Authentifizierung") @RequestHeader(name = "Authorization") String token);
+            @Parameter(description = "Die neuen Projektinformationen") @RequestBody @Valid ProjectPostDTO projectUpdateDto);
 
 
     @Operation(summary = "Löscht ein Projekt anhand der ID",
