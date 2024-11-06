@@ -35,7 +35,7 @@ public class ProjectAddEmployeeIT extends AbstractIntegrationTest {
             }
         """;
 
-        this.mockMvc.perform(post("/addEmployeeInProject", 1)
+        this.mockMvc.perform(post("/project/addEmployeeInProject", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson1)
                         .with(csrf()))

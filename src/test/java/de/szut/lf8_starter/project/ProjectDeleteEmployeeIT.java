@@ -22,7 +22,7 @@ public class ProjectDeleteEmployeeIT extends AbstractIntegrationTest {
 
     @Test
     void authorization() throws Exception {
-        this.mockMvc.perform(delete("/deleteEmployee/{projectId}", 1)
+        this.mockMvc.perform(delete("/project/deleteEmployee/{projectId}", 1)
                         .param("employeeId", "207")
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
