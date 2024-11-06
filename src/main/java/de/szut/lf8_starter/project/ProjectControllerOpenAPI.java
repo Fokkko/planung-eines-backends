@@ -1,6 +1,6 @@
 package de.szut.lf8_starter.project;
 
-import de.szut.lf8_starter.project.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,6 +1,6 @@
 package de.szut.lf8_starter.project;
 
-import de.szut.lf8_starter.project.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import jakarta.validation.Valid;
@@ -18,8 +18,6 @@ import java.util.List;
 @RequestMapping(value = "projects")
 @PreAuthorize("hasAnyAuthority('user')")
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final ProjectMapper projectMapper;
