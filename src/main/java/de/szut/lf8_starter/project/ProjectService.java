@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
+import de.szut.lf8_starter.project.dto.GetProjectsByEmployeeIdDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +32,7 @@ public class ProjectService {
 
             repository.save(projectEntity);
 
-            return projectMapper.projectEntityToDTO(projectEntity);
+            return projectMapper.ProjectEntityToProjectByEmoloyeeIdDto(projectEntity);
         } else {
             throw new EntityNotFoundException("Mitarbeiter mit ID " + dto.getResponsibleEmployeeId() + " nicht gefunden.");
         }
@@ -49,7 +50,7 @@ public class ProjectService {
         ProjectEntity updateDtoToEntity = this.projectMapper.projectDTOToEntity(dtoToUpdate);
         repository.save(updateDtoToEntity);
 
-        return this.projectMapper.projectEntityToDTO(updateDtoToEntity);
+        return this.projectMapper.ProjectEntityToProjectByEmoloyeeIdDto(updateDtoToEntity);
     }
 
     public void deleteById(Integer id){
@@ -62,7 +63,7 @@ public class ProjectService {
     public List<ProjectGetDTO> findAll() {
         List<ProjectEntity> entityList = this.repository.findAll();
         return entityList.stream()
-                .map(projectMapper::projectEntityToDTO)
+                .map(projectMapper::ProjectEntityToProjectByEmoloyeeIdDto)
                 .toList();
     }
 
@@ -71,7 +72,7 @@ public class ProjectService {
         if (entity.isEmpty()) {
             return null;
         }
-        return this.projectMapper.projectEntityToDTO(entity.get());
+        return this.projectMapper.ProjectEntityToProjectByEmoloyeeIdDto(entity.get());
     }
 
     public boolean addEmployeeToProject(AddEmployeeToProject addEmployeeToProject, String token) {
@@ -138,10 +139,10 @@ public class ProjectService {
         }
     }
 
-    public List<ProjectGetDTO> findAllProjectsByEmployee(Integer employeeId) {
+    public List<GetProjectsByEmployeeIdDTO> findAllProjectsByEmployee(Integer employeeId) {
         List<ProjectEntity> projects = this.repository.findByEmployeeIdsContains(employeeId);
         return projects.stream()
-                .map(project -> projectMapper.projectEntityToDTO(project))
+                .map(project -> projectMapper.ProjectEntityToProjectByEmoloyeeIdDto(project, employeeId))
                 .collect(Collectors.toList());
     }
 

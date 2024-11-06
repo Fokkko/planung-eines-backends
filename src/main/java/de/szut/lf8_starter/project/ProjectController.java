@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.employee.dto.DeleteEmployeeDTO;
+import de.szut.lf8_starter.project.dto.GetProjectsByEmployeeIdDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.security.JwtTokenProvider;
@@ -22,7 +23,6 @@ public class ProjectController implements ProjectControllerOpenAPI {
     private final ProjectService service;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // TODO Mitarbeiter verplanen fehlt!
     @Override
     @PostMapping("/create")
     public ResponseEntity<ProjectGetDTO> create(@RequestBody @Valid ProjectPostDTO projectCreateDto) {
@@ -76,7 +76,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @Override
     @GetMapping("/findAllProjectsByEmployee/{employeeId}")
-    public ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer employeeId) {
+    public ResponseEntity<List<GetProjectsByEmployeeIdDTO>> findAllProjectsByEmployee(@PathVariable Integer employeeId) {
         String token = jwtTokenProvider.getJwtToken();
         var getAllProjectsByEmployee = this.service.findAllProjectsByEmployee(employeeId);
         return new ResponseEntity<>(getAllProjectsByEmployee, HttpStatus.OK);

@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.dto.AddEmployeeToProject;
 import de.szut.lf8_starter.employee.dto.DeleteEmployeeDTO;
+import de.szut.lf8_starter.project.dto.GetProjectsByEmployeeIdDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,7 +99,7 @@ public interface ProjectControllerOpenAPI {
                     content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProjectGetDTO.class)))}),
             @ApiResponse(responseCode = "404", description = "Mitarbeiter existiert nicht", content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert", content = @Content)})
-    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(
+    ResponseEntity<List<GetProjectsByEmployeeIdDTO>> findAllProjectsByEmployee(
             @Parameter(description = "Die ID des Mitarbeiters") @PathVariable Integer employeeId);
 
     @Operation(summary = "Finde alle Mitarbeiter nach Projekt",
