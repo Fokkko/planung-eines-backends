@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 //import de.szut.lf8_starter.employeeTest.EmployeeEntity;
 //import de.szut.lf8_starter.employeeTest.EmployeeRepository;
+import de.szut.lf8_starter.project.dto.GetProjectsByEmployeeIdDTO;
 import de.szut.lf8_starter.project.dto.ProjectGetDTO;
 import de.szut.lf8_starter.project.dto.ProjectPostDTO;
 import org.springframework.stereotype.Component;
@@ -9,18 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectMapper {
 
-    public ProjectGetDTO projectEntityToDTO(ProjectEntity entity) {
+    public ProjectGetDTO ProjectEntityToProjectByEmoloyeeIdDto(ProjectEntity entity) {
         if (entity == null) {
             return null;
         }
 
         ProjectGetDTO dto = new ProjectGetDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
+        dto.setProjectId(entity.getId());
+        dto.setProjectName(entity.getName());
         dto.setResponsibleEmployee(entity.getResponsibleEmployeeId());
         dto.setCustomerId(entity.getCustomerId());
-        dto.setCustomerContactName(entity.getCustomerContactName());
-        dto.setDescription(entity.getComment());
         dto.setStartDate(entity.getStartDate());
         dto.setPlannedDate(entity.getPlannedEndDate());
         dto.setCustomerName(entity.getCustomerName());
@@ -52,5 +51,15 @@ public class ProjectMapper {
         }
 
         return entity;
+    }
+
+    public GetProjectsByEmployeeIdDTO ProjectEntityToProjectByEmoloyeeIdDto(ProjectEntity project, Integer employeeId) {
+        GetProjectsByEmployeeIdDTO dto = new GetProjectsByEmployeeIdDTO();
+        dto.setEmployeeId(employeeId);
+        dto.setProjectId(project.getId());
+        dto.setProjectName(project.getName());
+        dto.setProjectStartDate(project.getStartDate());
+        dto.setPlannedEndDate(project.getPlannedEndDate());
+        return dto;
     }
 }

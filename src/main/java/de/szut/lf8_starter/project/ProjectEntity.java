@@ -20,7 +20,7 @@ import java.util.List;
 public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
     @NotBlank(message = "Projektname darf nicht leer sein")
     private String name;
