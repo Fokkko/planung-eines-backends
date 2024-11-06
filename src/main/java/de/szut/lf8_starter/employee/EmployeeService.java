@@ -40,6 +40,25 @@ public class EmployeeService {
         }
     }
 
+    public boolean isQualifiedInService(Integer employeeId, Integer qualificationId, String token) {
+        String url = "https://employee.szut.dev/employees/" + employeeId;
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            QualificationDTO result = restTemplate.exchange(url, HttpMethod.GET, entity, QualificationDTO.class).getBody();
+            if (result == null) return false;
+            var skillSet = result.getSkillSet();
+            for (int i = 0; i < skillSet.size(); i++){
+                if (result.getSkillSet().get(i).getId().equals(qualificationId)) return true;
+            }
+            return false;
+        } catch (RestClientException e) {
+            throw new RuntimeException("Fehler beim Abrufen des Mitarbeiters: " + e.getMessage(), e);
+        }
+    }
 }
 
