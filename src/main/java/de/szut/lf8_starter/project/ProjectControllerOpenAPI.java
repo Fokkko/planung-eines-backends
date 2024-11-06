@@ -84,7 +84,7 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
     @PostMapping("/addEmployeeInProject")
-    ResponseEntity<AddEmployeeToProject> addEmployeeInProject(AddEmployeeToProject addEmployeeToProject, String token);
+    ResponseEntity<AddEmployeeToProject> addEmployeeInProject(AddEmployeeToProject addEmployeeToProject);
 
     @Operation(summary = "Entfernt einen Mitarbeiter aus einem Projekt")
     @ApiResponses(value = {
@@ -106,7 +106,7 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id, String token);
+    ResponseEntity<List<ProjectGetDTO>> findAllProjectsByEmployee(@PathVariable Integer id);
 
     @Operation(summary = "Finde all Mitarbeiter nach Projekt")
     @ApiResponses(value = {
@@ -117,5 +117,5 @@ public interface ProjectControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer id, String token);
+    ResponseEntity<List<Integer>> findAllEmployeesByProject(@PathVariable Integer id);
 }
