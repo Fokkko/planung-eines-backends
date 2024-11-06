@@ -52,7 +52,7 @@ public class ProjectPutIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(roles = "admin")
+    @WithMockUser(roles = "user")
     void updateProject() throws Exception {
 
         String projectJson1 = """

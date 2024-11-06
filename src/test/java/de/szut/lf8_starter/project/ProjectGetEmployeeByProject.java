@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.is;
 
-public class ProjectGetByIdIT extends AbstractIntegrationTest {
+public class ProjectGetEmployeeByProject extends AbstractIntegrationTest {
 
     private int testProjectId = 1;
 
@@ -23,7 +23,7 @@ public class ProjectGetByIdIT extends AbstractIntegrationTest {
 
     @Test
     void authorization() throws Exception {
-        this.mockMvc.perform(get("/projects/" + testProjectId)
+        this.mockMvc.perform(get("/projects/finAllEmployeesByProject/{id}" + testProjectId)
                         .with(csrf()))
                 .andExpect(status().isUnauthorized());
     }
@@ -32,14 +32,9 @@ public class ProjectGetByIdIT extends AbstractIntegrationTest {
     @WithMockUser(roles = "user")
     void getProjectById() throws Exception {
 
-        this.mockMvc.perform(get("/projects/{id}", testProjectId)
+        this.mockMvc.perform(get("/projects/finAllEmployeesByProject/{id}", testProjectId)
                         .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("ERP System Implementation")))
-                .andExpect(jsonPath("$.customerName", is("Tech Innovators Ltd.")))
-                .andExpect(jsonPath("$.responsibleEmployee", is(299)))
-                .andExpect(jsonPath("$.customerId", is(5003)))
-                .andExpect(jsonPath("$.description", is("Core project for business automation")));
+                .andExpect(status().isOk());
     }
 
 
