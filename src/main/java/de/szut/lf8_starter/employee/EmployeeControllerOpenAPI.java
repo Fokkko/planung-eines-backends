@@ -20,5 +20,5 @@ public interface EmployeeControllerOpenAPI {
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Nicht autorisiert",
                     content = @Content)})
-    ResponseEntity<Boolean> checkEmployeeExists(@PathVariable Integer employeeId, String token);
+    ResponseEntity<Boolean> checkEmployeeExists(@PathVariable Integer employeeId);
 }
